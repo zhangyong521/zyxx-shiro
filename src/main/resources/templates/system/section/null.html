@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <div th:replace="/system/section/head"></div>
+</head>
+<body>
+<div class="layui-fluid animated fadeInLeft">
+    <div class="layui-card">
+        <div class="layui-card-body">
+
+        </div>
+    </div>
+</div>
+</body>
+
+<div th:replace="/system/section/js"></div>
+<script th:inline="javascript">
+    layui.use(['element', 'table', 'zyxx', 'form', 'layer'], function () {
+        var element = layui.element
+            , table = layui.table
+            , form = layui.form
+            , zyxx = layui.zyxx
+            , layer = layui.layer
+            , $ = layui.jquery;
+
+    });
+</script>
+</html>

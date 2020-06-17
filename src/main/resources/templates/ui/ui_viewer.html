@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <div th:replace="/system/section/head"></div>
+</head>
+<body>
+<div class="layui-fluid animated fadeInLeft">
+    <div class="layui-card">
+        <div class="layui-card-header">Jquery viewer 图片预览插件</div>
+        <div class="layui-card-body">
+            <ul id="viewer" class="layui-display-none">
+                <li><img class="viewer-img" src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2562372298,495845374&fm=26&gp=0.jpg"></li>
+                <li><img class="viewer-img" src="https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3041599764,2432042915&fm=26&gp=0.jpg"></li>
+                <li><img class="viewer-img" src="https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=584948523,1006436504&fm=26&gp=0.jpg"></li>
+            </ul>
+            <button type="button" class="layui-btn" lay-event="showPhoto">图片预览</button>
+        </div>
+    </div>
+</div>
+</body>
+
+<div th:replace="/system/section/js"></div>
+<script th:inline="javascript">
+    layui.use(['element', 'table', 'zyxx', 'form', 'layer'], function () {
+        var element = layui.element
+            , table = layui.table
+            , form = layui.form
+            , zyxx = layui.zyxx
+            , layer = layui.layer
+            , $ = layui.jquery;
+
+        // 初始化图片预览插件
+        $('#viewer').viewer({
+            title: false,
+        });
+
+        globalActive = {
+            // 查看图片
+            showPhoto: function() {
+                $('.viewer-img').click();
+            },
+        };
+
+    });
+</script>
+</html>

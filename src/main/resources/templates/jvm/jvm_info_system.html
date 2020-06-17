@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <div th:replace="/system/section/head"></div>
+</head>
+<body>
+<div class="layui-fluid animated fadeInLeft">
+    <div class="layui-row layui-col-space10">
+        <div class="layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-header">系统信息</div>
+                <div class="layui-card-body">
+                    <div class="layui-form">
+                        <table class="layui-table">
+                            <tbody>
+                            <tr>
+                                <td>系统名称</td>
+                                <td th:text="${jvmInfo.systemName}"></td>
+                            </tr>
+                            <tr>
+                                <td>系统版本</td>
+                                <td th:text="${jvmInfo.systemVersion}"></td>
+                            </tr>
+                            <tr>
+                                <td>操作系统的架构</td>
+                                <td th:text="${jvmInfo.getSystemArch()}"></td>
+                            </tr>
+                            <tr>
+                                <td>可用的内核数</td>
+                                <td th:text="${jvmInfo.systemAvailableProcessors}"></td>
+                            </tr>
+                            <tr>
+                                <td>总物理内存(M)</td>
+                                <td th:text="${jvmInfo.totalPhysicalMemory}"></td>
+                            </tr>
+                            <tr>
+                                <td>已用物理内存(M)</td>
+                                <td th:text="${jvmInfo.usedPhysicalMemorySize}"></td>
+                            </tr>
+                            <tr>
+                                <td>剩余物理内存(M)</td>
+                                <td th:text="${jvmInfo.freePhysicalMemory}"></td>
+                            </tr>
+                            <tr>
+                                <td>总交换空间(M)</td>
+                                <td th:text="${jvmInfo.totalSwapSpaceSize}"></td>
+                            </tr>
+                            <tr>
+                                <td>已用交换空间(M)</td>
+                                <td th:text="${jvmInfo.usedSwapSpaceSize}"></td>
+                            </tr>
+                            <tr>
+                                <td>剩余交换空间(M)</td>
+                                <td th:text="${jvmInfo.freeSwapSpaceSize}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-header">编译信息</div>
+                <div class="layui-card-body">
+                    <div class="layui-form">
+                        <table class="layui-table">
+                            <thead>
+                            <tr>
+                                <th>参数描述</th>
+                                <th>参数值</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>JIT编译器名称</td>
+                                <td th:text="${jvmInfo.compilationName}"></td>
+                            </tr>
+                            <tr>
+                                <td>总编译时间(秒)</td>
+                                <td th:text="${jvmInfo.compilationTotalCompilationTime}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-header">类加载信息</div>
+                <div class="layui-card-body">
+                    <div class="layui-form">
+                        <table class="layui-table">
+                            <thead>
+                            <tr>
+                                <th>参数描述</th>
+                                <th>参数值</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>已加载类总数</td>
+                                <td th:text="${jvmInfo.classLoadTotalLoadedClassCount}"></td>
+                            </tr>
+                            <tr>
+                                <td>已加载当前类</td>
+                                <td th:text="${jvmInfo.classLoadLoadedClassCount}"></td>
+                            </tr>
+                            <tr>
+                                <td>已卸载类总数</td>
+                                <td th:text="${jvmInfo.classLoadUnloadedClassCount}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">垃圾回收信息</div>
+                <div class="layui-card-body">
+                    <div class="layui-form">
+                        <table class="layui-table">
+                            <thead>
+                            <tr>
+                                <th>名称</th>
+                                <th>收集</th>
+                                <th>总花费时间</th>
+                                <th>内存区名称</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="entity : ${jvmInfo.garbageCollectorInfos}">
+                                <td th:text="${entity.garbageName}"></td>
+                                <td th:text="${entity.garbageCollectionCount}"></td>
+                                <td th:text="${entity.garbageCollectionTime}"></td>
+                                <td th:text="${entity.garbageMemoryPoolNames}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+<div th:replace="/system/section/js"></div>
+<script th:inline="javascript">
+    layui.use(['element', 'table', 'zyxx', 'form', 'layer'], function () {
+        var element = layui.element
+            , table = layui.table
+            , form = layui.form
+            , zyxx = layui.zyxx
+            , layer = layui.layer
+            , $ = layui.jquery;
+
+    });
+</script>
+</html>

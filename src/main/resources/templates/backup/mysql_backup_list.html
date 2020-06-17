@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="/system/section/head"></div>
+</head>
+<body>
+<div class="layui-fluid animated fadeInLeft">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <!-- 搜索条件 -->
+            <div class="layui-row" id="zyxx-search">
+                <div class="layui-col-md12">
+                    <form class="layui-form" id="searchForm" lay-filter="searchFormFilter">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">操作人</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="userName" autocomplete="off" class="layui-input" placeholder="请输入">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label"></label>
+                                <div class="layui-input-inline">
+                                    <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" lay-event="search">
+                                        <i class="layui-icon layui-icon-search"></i>查询
+                                    </button>
+                                    <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" lay-event="reset">
+                                        <i class="layui-icon layui-icon-refresh"></i>重置
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="layui-col-md12 layui-btn-header">
+                    <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" lay-event="search">
+                        <i class="layui-icon layui-icon-refresh"></i>刷新
+                    </button>
+                    <button type="button" class="layui-btn layui-btn-sm" lay-event="add">
+                        <i class="layui-icon layui-icon-add-1"></i>创建备份
+                    </button>
+                </div>
+            </div>
+            <div class="layui-row">
+                <div class="layui-col-md12">
+                    <table class="layui-hide" id="dataTable" lay-filter="dataTableFilter"></table>
+                    <div id="detailModel" class="layui-model">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+<div th:replace="/system/section/js"></div>
+<script th:inline="javascript">
+    layui.use(['element', 'form', 'table', 'layer', 'zyxx'], function () {
+        var element = layui.element
+            , table = layui.table
+            , form = layui.form
+            , layer = layui.layer
+            , zyxx = layui.zyxx
+            , $ = layui.jquery;
+
+        // 数据表格
+        var cols = [
+            // {type: 'checkbox', fixed: 'left'}
+            {field: 'ip', title: 'IP', width: 100}
+            , {field: 'port', title: '端口', sort: true, width: 80}
+            , {field: 'userName', title: '用户名', width: 80}
+            // ,{field: 'password', title: '密码'}
+            // ,{field: 'filePath', title: '备份路径'}
+            , {field: 'fileName', title: '文件名', width: 150}
+            // , {field: 'uuidName', title: '随机名', width: 150}
+            , {field: 'databaseName', title: '数据库', width: 120}
+            , {field: 'defaultCharacterSet', title: '字符编码', width: 90}
+            , {
+                field: 'isCompact', title: '压缩模式', width: 90, templet: function (d) {
+                    return d.isCompact == 1 ? '是' : '否';
+                }}
+            , {field: 'isComments', title: '注释信息', width: 90, templet: function (d) {
+                    return d.isComments == 1 ? '是' : '否';
+                }}
+            , {field: 'isCompleteInsert', title: '完整语句', width: 90, templet: function (d) {
+                    return d.isCompleteInsert == 1 ? '是' : '否';
+                }}
+            , {field: 'isLockTables', title: '锁定库表', width: 90, templet: function (d) {
+                    return d.isLockTables == 1 ? '是' : '否';
+                }}
+            , {field: 'isNoCreateDb', title: '创库语句', width: 90, templet: function (d) {
+                    return d.isNoCreateDb == 1 ? '是' : '否';
+                }}
+            , {field: 'isForce', title: '出错继续', width: 90, templet: function (d) {
+                    return d.isForce == 1 ? '是' : '否';
+                }}
+            , {field: 'isAddDropDatabase', title: 'Drop库', width: 90, templet: function (d) {
+                    return d.isAddDropDatabase == 1 ? '是' : '否';
+                }}
+            , {field: 'isAddDropTable', title: 'Drop表', width: 90, templet: function (d) {
+                    return d.isAddDropTable == 1 ? '是' : '否';
+                }}
+            , {field: 'isSpecifyTable', title: '指定表名', width: 90, templet: function (d) {
+                    return d.isSpecifyTable == 1 ? '是' : '否';
+                }}
+            , {field: 'specifyTable', title: '备份范围', width: 120, templet: function (d) {
+                if (d.isSpecifyTable == 0) {
+                    return '所有表';
+                } else {
+                    return d.specifyTable;
+                }
+                }}
+            , {field: 'command', title: '执行命令', width: 200}
+            , {field: 'createTime', title: '创建时间', sort: true, width: 180}
+            , {fixed: 'right', title: '操作', width: 120, templet: function (d) {
+                    var dom = '';
+                    dom += '<a class="layui-color-green" lay-event="detail" title="详情"><i class="layui-icon layui-icon-form"></i></a>';
+                    dom += '<a class="layui-color-blue" lay-event="download" title="下载"><i class="layui-icon layui-icon-download-circle"></i></a>';
+                    dom += '<a class="layui-color-red" lay-event="delete" title="删除"><i class="layui-icon layui-icon-delete"></i></a>';
+                    return dom;
+                }}
+        ];
+        table.render({
+            elem: '#dataTable'
+            , method: 'post'
+            , height: "full-" + ($('#zyxx-search').height() + 40)
+            , url: '/backup/mysqlDump/list'
+            , page: true
+            , limit: 20
+            , limits: [20, 40, 50, 80, 100]
+            , cols: [cols]
+        });
+
+        globalActive = {
+            // 查询、刷新
+            refresh: function() {
+                var data = form.val('searchFormFilter');
+                table.reload('dataTable', {where: data});
+            },
+            // 重置
+            reset: function() {
+                $("#searchForm")[0].reset();
+                var data = form.val('searchFormFilter');
+                table.reload('dataTable', {where: data});
+            },
+            add: function () {
+                zyxx.openTabsPage('/backup/mysqlBackup/addPage', '创建备份');
+            },
+            detail: function (obj) {
+                var data = zyxx.parse(obj);
+                var dom = '';
+                for (var key in data) {
+                    for (var i = 0; i < cols.length; i++) {
+                        if (key == cols[i].field) {
+                            dom += '<div class="layui-col-md6">';
+                            dom += '	<div class="layui-form-item">';
+                            dom += '		<label class="layui-form-label">' + cols[i].title + '</label>';
+                            dom += '		<div class="layui-input-inline">';
+                            if (cols[i].templet) {
+                                dom += '			<input type="text" name="' + cols[i].field + '" value="' + cols[i].templet(data) + '" disabled class="layui-input">';
+                            } else {
+                                dom += '			<input type="text" name="' + cols[i].field + '" value="' + data[key] + '" disabled class="layui-input">';
+                            }
+                            dom += '		</div>';
+                            dom += '	</div>';
+                            dom += '</div>';
+                        }
+                    }
+                }
+                $('#detail').empty().append(dom);
+                zyxx.openDetail('详情', 'detailModel', false, 700, 500);
+            },
+            download: function (obj) {
+                var data = zyxx.parse(obj);
+                var param = 'filePath=' + data.filePath + '&fileName=' + data.fileName + '.sql';
+                window.location.href = '/downloadFile?' + param;
+            },
+            delete: function (obj) {
+                var data = zyxx.parse(obj);
+                layer.confirm('删除数据后不可恢复，确定删除吗？', {icon: 0, title: '系统提示'}, function () {
+                    layer.load(2, {shade: 0.1});
+                    $.ajax({
+                        url: '/backup/mysqlDump/delete',
+                        type: 'post',
+                        data: {id: data.id, status: 2},
+                        dataType: 'json',
+                        success: function (res) {
+                            if (res.code == 200) {
+                                layer.msg(res.message, {icon: 1, time: 2000}, function () {
+                                    layer.closeAll();
+                                    globalActive.refresh();
+                                });
+                            } else {
+                                layer.msg(res.message, {icon: 2, time: 2000});
+                            }
+                        },
+                        error: function () {
+                            layer.msg('出错了请稍后再试或联系管理员', {icon: 2, time: 2000});
+                        }
+                    });
+                });
+            },
+        };
+
+        globalTableFilter = ['dataTableFilter'];
+        handleFilter(table);
+    });
+</script>
+</html>

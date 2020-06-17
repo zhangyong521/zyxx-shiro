@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <div th:replace="/system/section/head"></div>
+    <style>
+        p>button {
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-fluid animated fadeInLeft">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <blockquote class="layui-elem-quote">
+                <p>这个页面有权限相关的重要标签，请查看页面源码学习</p>
+                <p>标签可以直接包裹住，也可以直接写在标签上，"button class="layui-btn" shiro:authenticated </p>
+                <p>当前页面有10个不同权限的按钮，用作开发中的使用案例</p>
+            </blockquote>
+
+            <p><button class="layui-btn">相当于((User)Subject.getPrincipals()).getUsername()，当前用户名：<shiro:principal property="userName"/></button></p>
+            <shiro:guest>
+                <p><button class="layui-btn">用户没有身份验证时显示相应信息，即游客访问信息</button></p>
+            </shiro:guest>
+            <shiro:user>
+                <p><button class="layui-btn">用户已经身份验证/记住我登录后显示相应的信息</button></p>
+            </shiro:user>
+            <shiro:authenticated>
+                <p><button class="layui-btn">用户已经身份验证通过，即Subject.login登录成功，不是记住我登录的</button></p>
+            </shiro:authenticated>
+            <shiro:notAuthenticated>
+                <p><button class="layui-btn">用户已经身份验证通过，即没有调用Subject.login进行登录，包括记住我自动登录的也属于未进行身份验证</button></p>
+            </shiro:notAuthenticated>
+            <shiro:lacksPermission name="org:create">
+                <p><button class="layui-btn">如果当前Subject没有权限将显示body体内容</button></p>
+            </shiro:lacksPermission>
+            <shiro:hasRole name="admin">
+                <p><button class="layui-btn">如果当前Subject有角色将显示body体内容</button></p>
+            </shiro:hasRole>
+            <shiro:hasAnyRoles name="admin,user">
+                <p><button class="layui-btn">如果当前Subject有任意一个角色（或的关系）将显示body体内容</button></p>
+            </shiro:hasAnyRoles>
+            <shiro:lacksRole name="abc">
+                <p><button class="layui-btn">如果当前Subject没有角色将显示body体内容</button></p>
+            </shiro:lacksRole>
+            <shiro:hasPermission name="user:create">
+                <p><button class="layui-btn">如果当前Subject没有角色将显示body体内容</button></p>
+            </shiro:hasPermission>
+        </div>
+    </div>
+</div>
+</body>
+
+<div th:replace="/system/section/js"></div>
+<script th:inline="javascript">
+    layui.use(['element', 'table', 'zyxx', 'form', 'layer', 'code'], function () {
+        var element = layui.element
+            , table = layui.table
+            , form = layui.form
+            , zyxx = layui.zyxx
+            , layer = layui.layer
+            , code = layui.code
+            , $ = layui.jquery;
+
+        layui.code();
+    });
+</script>
+</html>

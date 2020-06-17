@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <div th:replace="/system/section/head"></div>
+</head>
+<body>
+<div class="layui-fluid animated fadeInLeft">
+    <div class="layui-row layui-col-space10">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">运行时信息</div>
+                <div class="layui-card-body">
+                    <div class="layui-form">
+                        <table class="layui-table">
+                            <colgroup>
+                                <col width="200">
+                                <col>
+                            </colgroup>
+                            <tbody>
+                            <tr>
+                                <td>进程PID</td>
+                                <td th:text="${jvmInfo.runtimeName}"></td>
+                            </tr>
+                            <tr>
+                                <td>jvm规范名称</td>
+                                <td th:text="${jvmInfo.runtimeSpecName}"></td>
+                            </tr>
+                            <tr>
+                                <td>jvm规范运营商</td>
+                                <td th:text="${jvmInfo.runtimeSpecVendor}"></td>
+                            </tr>
+                            <tr>
+                                <td>jvm规范版本</td>
+                                <td th:text="${jvmInfo.runtimeSpecVersion}"></td>
+                            </tr>
+                            <tr>
+                                <td>jvm启动时间(毫秒)</td>
+                                <td th:text="${jvmInfo.runtimeStartTime}"></td>
+                            </tr>
+                            <tr>
+                                <td>获取System.properties</td>
+                                <!--<td th:text="${jvmInfo.runtimeSystemProperties}"></td>-->
+                                <td><span lay-event="detail" class="layui-color-blue" th:data-content="${jvmInfo.runtimeSystemProperties}">查看详情</span></td>
+                            </tr>
+                            <tr>
+                                <td>jvm正常运行时间(毫秒)</td>
+                                <td th:text="${jvmInfo.runtimeUptime}"></td>
+                            </tr>
+                            <tr>
+                                <td>jvm名称</td>
+                                <td th:text="${jvmInfo.runtimeVmName}"></td>
+                            </tr>
+                            <tr>
+                                <td>jvm运营商</td>
+                                <td th:text="${jvmInfo.runtimeVmVendor}"></td>
+                            </tr>
+                            <tr>
+                                <td>jvm实现版本</td>
+                                <td th:text="${jvmInfo.runtimeVmVersion}"></td>
+                            </tr>
+                            <tr>
+                                <td>vm参数</td>
+                                <td th:text="${jvmInfo.runtimeInputArguments}"></td>
+                            </tr>
+                            <tr>
+                                <td>类路径</td>
+                                <!--<td th:text="${jvmInfo.runtimeClassPath}"></td>-->
+                                <td><span lay-event="detail" class="layui-color-blue" th:data-content="${jvmInfo.runtimeSystemProperties}">查看详情</span></td>
+                            </tr>
+                            <tr>
+                                <td>引导类路径</td>
+                                <td th:text="${jvmInfo.runtimeBootClassPath}"></td>
+                            </tr>
+                            <tr>
+                                <td>库路径</td>
+                                <!--<td th:text="${jvmInfo.runtimeLibraryPath}"></td>-->
+                                <td><span lay-event="detail" class="layui-color-blue" th:data-content="${jvmInfo.runtimeSystemProperties}">查看详情</span></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+<div th:replace="/system/section/js"></div>
+<script th:inline="javascript">
+    layui.use(['element', 'table', 'zyxx', 'form', 'layer'], function () {
+        var element = layui.element
+            , table = layui.table
+            , form = layui.form
+            , zyxx = layui.zyxx
+            , layer = layui.layer
+            , $ = layui.jquery;
+    });
+</script>
+</html>

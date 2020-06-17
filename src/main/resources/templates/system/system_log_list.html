@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <div th:replace="/system/section/head"></div>
+</head>
+<body>
+<div class="layui-fluid animated fadeInLeft">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <!-- 搜索条件 -->
+            <div class="layui-row" id="zyxx-search">
+                <div class="layui-col-md12">
+                    <form class="layui-form" id="searchForm" lay-filter="searchFormFilter">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">操作人</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="userName" autocomplete="off" class="layui-input" placeholder="请输入">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label"></label>
+                                <div class="layui-input-inline">
+                                    <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" lay-event="search">
+                                        <i class="layui-icon layui-icon-search"></i>查询
+                                    </button>
+                                    <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" lay-event="reset">
+                                        <i class="layui-icon layui-icon-refresh"></i>重置
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="layui-col-md12 layui-btn-header">
+                    <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" lay-event="search">
+                        <i class="layui-icon layui-icon-refresh"></i>刷新
+                    </button>
+                    <button type="button" class="layui-btn layui-btn-sm layui-btn-danger" lay-event="batchDelete">
+                        <i class="layui-icon layui-icon-delete"></i>批量删除
+                    </button>
+                </div>
+            </div>
+            <div class="layui-row">
+                <div class="layui-col-md12">
+                    <!-- 数据表格 -->
+                    <table class="layui-hide" id="dataTable" lay-filter="dataTableFilter"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+<div th:replace="/system/section/js"></div>
+<script th:inline="javascript">
+    layui.use(['element', 'table', 'zyxx', 'form', 'layer'], function () {
+        var element = layui.element
+            , table = layui.table
+            , form = layui.form
+            , zyxx = layui.zyxx
+            , layer = layui.layer
+            , $ = layui.jquery;
+
+        // 数据表格
+        table.render({
+            id: 'dataTable'
+            , elem: '#dataTable'
+            , method: 'post'
+            , url: '/system/systemLog/listByTable'
+            , page: true
+            , limit: 20
+            , limits: [20, 40, 50, 80, 100]
+            , height: "full-" + ($('#zyxx-search').height() + 40)
+            , cellMinWidth: 80
+            , cols: [ [
+                {type: 'checkbox'}
+                , {type:'numbers', title: '序号', width: 80}
+                , {field: 'userName', title: '操作人', width: 100}
+                , {field: 'ip', title: 'IP地址', width: 120}
+                , {field: 'time', title: '耗时', width: 80}
+                , {field: 'method', title: '操作方法', width: 300}
+                , {field: 'params', title: '操作参数', width: 200}
+                , {field: 'operation', title: '操作描述', width: 150}
+                , {field: 'location', title: '操作地点', width: 150}
+                , {field: 'device', title: '操作设备', width: 220}
+                , {field: 'createTime', title: '操作时间', width: 160}
+                , {
+                    fixed: 'right', title: '操作', width: 60, templet: function (d) {
+                        var dom = '';
+                        dom += '<a class="layui-color-red" lay-event="delete" title="删除"><i class="layui-icon layui-icon-delete"></i></a>';
+                        return dom;
+                    }
+                }
+            ]]
+        });
+
+        // 第一步：注册方法
+        globalActive = {
+            // 查询、刷新
+            search: function() {
+                var data = form.val('searchFormFilter');
+                table.reload('dataTable', {where: data});
+            },
+            // 重置
+            reset: function() {
+                $("#searchForm")[0].reset();
+                var data = form.val('searchFormFilter');
+                table.reload('dataTable', {where: data});
+            },
+            // 批量删除
+            batchDelete: function (obj) {
+                var checkStatus = table.checkStatus('dataTable')
+                    , data = checkStatus.data;
+                if (data.length == 0) {
+                    layer.msg('请勾选删除行', {icon: 1, time: 2000});
+                    return false;
+                }
+                var ids = new Array();
+                for (var i = 0; i < data.length; i++) {
+                    ids.push(data[i].id);
+                }
+                layer.confirm('删除数据后不可恢复，确定删除吗？', {icon: 0, title: '提示'}, function () {
+                    layer.load(2, {shade: 0.1});
+                    $.ajax({
+                        url: '/system/systemLog/deleteByIds',
+                        type: 'post',
+                        data: {ids: ids.join(',')},
+                        dataType: 'json',
+                        success: function (res) {
+                            if (res.code == 200) {
+                                layer.msg(res.message, {icon: 1, time: 2000}, function () {
+                                    layer.closeAll();
+                                    globalActive.search();
+                                });
+                            } else {
+                                layer.msg(res.message, {icon: 2, time: 2000});
+                            }
+                        },
+                        error: function () {
+                            layer.closeAll();
+                            layer.msg('请求失败', {icon: 2, time: 2000});
+                        }
+                    });
+                });
+            },
+            // 删除
+            delete: function (obj) {
+                var data = JSON.parse(obj);
+                layer.confirm('删除数据后不可恢复，确定删除吗？', {icon: 0, title: '提示'}, function () {
+                    layer.load(2, {shade: 0.1});
+                    $.ajax({
+                        url: '/system/systemLog/deleteByIds',
+                        type: 'post',
+                        data: {ids: data.id},
+                        dataType: 'json',
+                        success: function (res) {
+                            if (res.code == 200) {
+                                layer.msg(res.message, {icon: 1, time: 2000}, function () {
+                                    layer.closeAll();
+                                    globalActive.search();
+                                });
+                            } else {
+                                layer.msg(res.message, {icon: 2, time: 2000});
+                            }
+                        },
+                        error: function () {
+                            layer.closeAll();
+                            layer.msg('请求失败', {icon: 2, time: 2000});
+                        }
+                    });
+                });
+            },
+        };
+
+        globalTableFilter = ['dataTableFilter'];
+        handleFilter(table);
+    });
+</script>
+</html>

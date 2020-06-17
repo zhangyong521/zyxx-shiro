@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <div th:replace="/system/section/head"></div>
+</head>
+<body>
+<div class="layui-fluid animated fadeInLeft">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <!-- 搜索条件 -->
+            <div class="layui-row" id="zyxx-search">
+                <div class="layui-col-md12">
+                    <form class="layui-form" id="searchForm" lay-filter="searchFormFilter">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">标识</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="name" lay-verify="required" autocomplete="off" placeholder="请输入" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">名称</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="description" lay-verify="required" autocomplete="off" placeholder="请输入" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label"></label>
+                                <div class="layui-input-inline">
+                                    <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" lay-event="search">
+                                        <i class="layui-icon layui-icon-search"></i>查询
+                                    </button>
+                                    <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" lay-event="reset">
+                                        <i class="layui-icon layui-icon-refresh"></i>重置
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="layui-col-md12 layui-btn-header">
+                    <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" lay-event="search">
+                        <i class="layui-icon layui-icon-refresh"></i>刷新
+                    </button>
+                    <button type="button" class="layui-btn layui-btn-sm" lay-event="add">
+                        <i class="layui-icon layui-icon-add-1"></i>新增
+                    </button>
+                </div>
+            </div>
+            <div class="layui-row">
+                <div class="layui-col-md12">
+                    <!-- 数据表格 -->
+                    <table class="layui-hide" id="dataTable" lay-filter="dataTableFilter"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<!-- 新增 -->
+<div id="addModel" class="layui-model">
+    <form class="layui-form" id="addForm" lay-filter="addFormFilter">
+        <div class="layui-form-item">
+            <label class="layui-form-label">标识</label>
+            <div class="layui-input-block">
+                <input type="text" name="name" lay-verify="required" autocomplete="off" placeholder="请输入" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="description" lay-verify="required" autocomplete="off" placeholder="请输入" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">排序</label>
+            <div class="layui-input-block">
+                <input type="number" name="sort" value="0" lay-verify="required" autocomplete="off" placeholder="请输入" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">权限</label>
+            <div class="layui-input-block">
+                <div id="xmSelectAdd"></div>
+            </div>
+        </div>
+        <div class="layui-hide">
+            <button type="submit" class="layui-btn" id="addFormSubmit" lay-submit lay-filter="addFormSubmitFilter"></button>
+        </div>
+    </form>
+</div>
+<!-- 更新 -->
+<div id="updateModel" class="layui-model">
+    <form class="layui-form" id="updateForm" lay-filter="updateFormFilter">
+        <div class="layui-form-item">
+            <label class="layui-form-label">标识</label>
+            <div class="layui-input-block">
+                <input type="text" name="name" lay-verify="required" autocomplete="off" placeholder="请输入" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="description" lay-verify="required" autocomplete="off" placeholder="请输入" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">排序</label>
+            <div class="layui-input-block">
+                <input type="number" name="sort" lay-verify="required" autocomplete="off" placeholder="请输入" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">权限</label>
+            <div class="layui-input-block">
+                <div id="xmSelectUpdate"></div>
+            </div>
+        </div>
+        <div class="layui-hide">
+            <button type="submit" class="layui-btn" id="updateFormSubmit" lay-submit lay-filter="updateFormSubmitFilter"></button>
+        </div>
+    </form>
+</div>
+
+<div th:replace="/system/section/js"></div>
+<script th:inline="javascript">
+    layui.use(['element', 'table', 'zyxx', 'form', 'layer'], function () {
+        var element = layui.element
+            , table = layui.table
+            , form = layui.form
+            , zyxx = layui.zyxx
+            , layer = layui.layer
+            , $ = layui.jquery;
+
+        var xsOption = {
+            autoRow: true,
+            filterable: true,
+            direction: 'down',
+            tree: {
+                //是否显示树状结构
+                show: true,
+                //是否显示虚线
+                showLine: true,
+                //展开所有节点
+                expandedKeys: true,
+                //是否严格遵守父子模式
+                strict: true,
+            },
+            toolbar: {show: true},
+            height: 'auto',
+            prop: {
+                name: 'name',
+                value: 'id',
+            },
+            data: function() {
+                return [[${resourceInfoList}]]
+            }
+        };
+        // 实例化新增
+        var xsAdd = xsOption;
+        xsAdd.el = '#xmSelectAdd';
+        var xmSelectAdd = xmSelect.render(xsAdd);
+        // 实例化更新
+        var xsUpdate = xsOption;
+        xsUpdate.el = '#xmSelectUpdate';
+        xsUpdate.tree.strict = false;
+        var xmSelectUpdate = xmSelect.render(xsUpdate);
+
+        // 数据表格
+        table.render({
+            elem: '#dataTable'
+            , method: 'post'
+            , url: '/system/roleInfo/listByTable'
+            , page: true
+            , limit: 20
+            , limits: [20, 40, 50, 80, 100]
+            , height: "full-" + ($('#zyxx-search').height() + 40)
+            , cols: [[
+                // {type: 'checkbox'}
+                {type:'numbers', title: '序号'}
+                , {field: 'name', title: '标识', width: 120}
+                , {field: 'description', title: '名称', width: 100}
+                , {field: 'resourceName', title: '权限'}
+                , {field: 'sort', title: '排序', width: 80, sort: true}
+                , {field: 'userName', title: '创建人', width: 100}
+                , {field: 'createTime', title: '创建时间', width: 160, sort: true}
+                , {
+                    field: 'status', title: '状态', width: 80, templet: function (d) {
+                        if (d.status == 1) {
+                            return '<span class="layui-badge layui-bg-green">正常</span>'
+                        } else if (d.status == 2) {
+                            return '<span class="layui-badge layui-bg-orange">锁定</span>'
+                        } else if (d.status == 3) {
+                            return '<span class="layui-badge layui-bg-black">删除</span>'
+                        }
+                    }
+                }
+                , {
+                    fixed: 'right', title: '操作', width: 100, templet: function (d) {
+                        var dom = '';
+                        dom += '<a class="layui-color-blue" lay-event="update" title="更新"><i class="layui-icon layui-icon-edit"></i></a>';
+                        dom += '<a class="layui-color-red" lay-event="delete" title="删除"><i class="layui-icon layui-icon-delete"></i></a>';
+                        return dom;
+                    }
+                }
+            ]]
+        });
+
+        globalActive = {
+            // 查询、刷新
+            search: function() {
+                var data = form.val('searchFormFilter');
+                table.reload('dataTable', {where: data});
+            },
+            // 重置
+            reset: function() {
+                $("#searchForm")[0].reset();
+                var data = form.val('searchFormFilter');
+                table.reload('dataTable', {where: data});
+            },
+            // 新增
+            add: function () {
+                zyxx.openForm('新增角色', 'addModel', 'addForm', false, 500, 500, function () {
+                    form.on('submit(addFormSubmitFilter)', function (obj) {
+                        obj.field.resourceIds = xmSelectAdd.getValue('valueStr');
+                        if (zyxx.isEmpty(obj.field.resourceIds)) {
+                            layer.msg('请选择权限', {time: 2000, icon: 2});
+                            xmSelectAdd.warning('#e54d42', true);
+                            return false;
+                        }
+                        layer.load(2, {shade: 0.1});
+                        $.ajax({
+                            url: '/system/roleInfo/save',
+                            type: 'post',
+                            data: obj.field,
+                            dataType: 'json',
+                            success: function (res) {
+                                if (res.code == 200) {
+                                    layer.msg(res.message, {icon: 1, time: 2000}, function () {
+                                        layer.closeAll();
+                                        globalActive.search();
+                                    });
+                                } else {
+                                    layer.msg(res.message, {icon: 2, time: 2000});
+                                }
+                            },
+                            error: function () {
+                                layer.closeAll();
+                                layer.msg('请求失败', {icon: 2, time: 2000});
+                            }
+                        });
+                        return false;
+                    });
+                    $('#addFormSubmit').trigger("click");
+                });
+            },
+            // 更新
+            update: function (obj) {
+                var data = zyxx.parse(obj);
+                xmSelectUpdate.setValue(data.resourceIds.split(','));
+                form.val('updateFormFilter', data);
+                zyxx.openForm('更新角色', 'updateModel', 'updateForm', false, 500, 500, function () {
+                    form.on('submit(updateFormSubmitFilter)', function (obj) {
+                        obj.field.id = data.id;
+                        obj.field.resourceIds = xmSelectUpdate.getValue('valueStr');
+                        if (zyxx.isEmpty(obj.field.resourceIds)) {
+                            layer.msg('请选择权限', {time: 2000, icon: 2});
+                            xmSelectUpdate.warning('#e54d42', true);
+                            return false;
+                        }
+                        layer.load(2, {shade: 0.1});
+                        $.ajax({
+                            url: '/system/roleInfo/update',
+                            type: 'post',
+                            data: obj.field,
+                            dataType: 'json',
+                            success: function (res) {
+                                if (res.code == 200) {
+                                    layer.msg(res.message, {icon: 1, time: 2000}, function () {
+                                        layer.closeAll();
+                                        globalActive.search();
+                                    });
+                                } else {
+                                    layer.msg(res.message, {icon: 2, time: 2000});
+                                }
+                            },
+                            error: function () {
+                                layer.closeAll();
+                                layer.msg('请求失败', {icon: 2, time: 2000});
+                            }
+                        });
+                        return false;
+                    });
+                    $('#updateFormSubmit').trigger("click");
+                });
+            },
+            // 删除
+            delete: function (obj) {
+                var data = zyxx.parse(obj);
+                layer.confirm('删除数据后不可恢复，确定删除吗？', {icon: 0, title: '提示'}, function () {
+                    layer.load(2, {shade: 0.1});
+                    $.ajax({
+                        url: '/system/roleInfo/deleteById',
+                        type: 'post',
+                        data: {id: data.id},
+                        dataType: 'json',
+                        success: function (res) {
+                            if (res.code == 200) {
+                                layer.msg(res.message, {icon: 1, time: 2000}, function () {
+                                    layer.closeAll();
+                                    globalActive.search();
+                                });
+                            } else {
+                                layer.msg(res.message, {icon: 2, time: 2000});
+                            }
+                        },
+                        error: function () {
+                            layer.closeAll();
+                            layer.msg('请求失败', {icon: 2, time: 2000});
+                        }
+                    });
+                });
+            },
+        };
+
+        globalTableFilter = ['dataTableFilter'];
+        handleFilter(table);
+    });
+</script>
+</html>

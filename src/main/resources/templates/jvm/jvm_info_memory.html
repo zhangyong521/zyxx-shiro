@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <div th:replace="/system/section/head"></div>
+</head>
+<body>
+<div class="layui-fluid animated fadeInLeft">
+    <div class="layui-row layui-col-space10">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">内存信息</div>
+                <div class="layui-card-body">
+                    <div class="layui-form">
+                        <table class="layui-table">
+                            <thead>
+                            <tr>
+                                <th>名称</th>
+                                <th>初始(M)</th>
+                                <th>最大(上限)(M)</th>
+                                <th>当前(已使用)(M)</th>
+                                <th>提交的内存(已申请)(M)</th>
+                                <th>使用率</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>head堆</td>
+                                <td th:text="${jvmInfo.headMemoryInit}"></td>
+                                <td th:text="${jvmInfo.headMemoryMax}"></td>
+                                <td th:text="${jvmInfo.headMemoryUsed}"></td>
+                                <td th:text="${jvmInfo.headMemoryCommitted}"></td>
+                                <td th:text="${jvmInfo.headMemoryUseRate}"></td>
+                            </tr>
+                            <tr>
+                                <td>non-head非堆</td>
+                                <td th:text="${jvmInfo.nonheadMemoryInit}"></td>
+                                <td th:text="${jvmInfo.nonheadMemoryMax}"></td>
+                                <td th:text="${jvmInfo.nonheadMemoryUsed}"></td>
+                                <td th:text="${jvmInfo.nonheadMemoryCommitted}"></td>
+                                <td th:text="${jvmInfo.nonheadMemoryUseRate}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">内存管理器信息</div>
+                <div class="layui-card-body">
+                    <div class="layui-form">
+                        <table class="layui-table">
+                            <thead>
+                            <tr>
+                                <th>名称</th>
+                                <th>管理的内存区</th>
+                                <th>对象名称</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="entity : ${jvmInfo.memoryManagerInfos}">
+                                <td th:text="${entity.managerName}"></td>
+                                <td th:text="${entity.managerMemoryPoolNames}"></td>
+                                <td th:text="${entity.managerObjectName}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">各内存区信息</div>
+                <div class="layui-card-body">
+                    <div class="layui-form">
+                        <table class="layui-table">
+                            <thead>
+                            <tr>
+                                <th>名称</th>
+                                <th>所属内存管理者</th>
+                                <th>对象名称</th>
+                                <th>初始大小(M)</th>
+                                <th>最大(上限)(M)</th>
+                                <th>已用大小(M)</th>
+                                <th>已提交(已申请)(M)</th>
+                                <th>使用率</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="entity : ${jvmInfo.memoryPoolInfos}">
+                                <td th:text="${entity.poolName}"></td>
+                                <td th:text="${entity.poolMemoryManagerNames}"></td>
+                                <td th:text="${entity.poolObjectName}"></td>
+                                <td th:text="${entity.poolInit}"></td>
+                                <td th:text="${entity.poolMax}"></td>
+                                <td th:text="${entity.poolUsed}"></td>
+                                <td th:text="${entity.poolCommitted}"></td>
+                                <td th:text="${entity.poolUseRate}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+<div th:replace="/system/section/js"></div>
+<script th:inline="javascript">
+    layui.use(['element', 'table', 'zyxx', 'form', 'layer'], function () {
+        var element = layui.element
+            , table = layui.table
+            , form = layui.form
+            , zyxx = layui.zyxx
+            , layer = layui.layer
+            , $ = layui.jquery;
+
+    });
+</script>
+</html>
