@@ -83,7 +83,8 @@
             , {fixed: 'right', title: '操作', width: 210, align: 'center', toolbar: '#rowBar'}
         ];
         table.render({
-            elem: '#dataTable'
+            id: 'dataTable'
+            , elem: '#dataTable'
             , method: 'post'
             , height: "full-" + ($('#zyxx-search').height() + 40)
             , url: '/backup/mysqlRecover/list'

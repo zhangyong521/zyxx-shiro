@@ -14,12 +14,13 @@ layui.config({
     // 监听窗口变化
     $(window).resize(function() {
         // 窗口改变，重置表格高度
-        table.reload('dataTable', {height: "full-" + ($('#zyxx-search').height() + 50)});
+        // table.reload('dataTable', {height: "full-" + ($('#zyxx-search').height() + 50)});
     });
 
     // 监听折叠
     element.on('collapse(searchCollapseFilter)', function (data) {
-        table.reload('dataTable', {height: "full-" + ($('#zyxx-search').height() + 50)});
+        // 窗口改变，重置表格高度
+        // table.reload('dataTable', {height: "full-" + ($('#zyxx-search').height() + 50)});
     });
 });
 
