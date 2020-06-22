@@ -1,5 +1,6 @@
 package com.zyxx.system.service.impl;
 
+import com.zyxx.common.authorization.DynamicShiro;
 import com.zyxx.common.consts.SqlPool;
 import com.zyxx.common.exception.CrudException;
 import com.zyxx.system.entity.ResourceInfo;
@@ -43,16 +44,19 @@ public class ResourceInfoServiceImpl extends ServiceImpl<ResourceInfoMapper, Res
         return list;
     }
 
+    @DynamicShiro
     @Override
     public int saveResourceInfo(ResourceInfo resourceInfo) throws CrudException {
         return this.baseMapper.insert(resourceInfo);
     }
 
+    @DynamicShiro
     @Override
     public int updateResourceInfo(ResourceInfo resourceInfo) throws CrudException {
         return this.baseMapper.updateById(resourceInfo);
     }
 
+    @DynamicShiro
     @Override
     public int deleteResourceInfoById(int id) throws CrudException {
         return this.baseMapper.updateById(new ResourceInfo().setId(id).setStatus(SqlPool.STATUS_DELETE));

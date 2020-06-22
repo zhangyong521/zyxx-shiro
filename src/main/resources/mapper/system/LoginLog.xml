@@ -12,7 +12,8 @@
     </select>
 
     <select id="listByTable" resultType="com.zyxx.system.entity.LoginLog">
-        select a.*, b.user_name user_name
+        select a.id, a.user_id, a.ip, a.location, a.create_time, a.device, a.`code`, a.message, a.`status`,
+        ifnull(a.user_name, b.user_name) user_name
         from login_log a
         left join user_info b on a.user_id = b.id
         where a.status = 1

@@ -34,6 +34,12 @@ public class LoginLog extends BaseEntity {
     private Integer userId;
 
     /**
+     * 用户名
+     */
+    @TableField("user_name")
+    private String userName;
+
+    /**
      * IP地址
      */
     @TableField("ip")
@@ -48,7 +54,7 @@ public class LoginLog extends BaseEntity {
     /**
      * 登录时间
      */
-    @TableField("create_time")
+    @TableField(value = "create_time", fill = FieldFill.INSERT)
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
@@ -75,7 +81,4 @@ public class LoginLog extends BaseEntity {
      */
     @TableField(value = "status", fill = FieldFill.INSERT)
     private Integer status;
-
-    @TableField(exist = false)
-    private String userName;
 }

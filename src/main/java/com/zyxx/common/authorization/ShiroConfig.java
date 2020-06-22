@@ -15,8 +15,10 @@ import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.filter.DelegatingFilterProxy;
 
 /**
  * shiro 权限配置
@@ -60,6 +62,22 @@ public class ShiroConfig {
         return securityManager;
     }
 
+    /**
+     * 委派筛选器代理
+     * 解决 Shiro 中 UnavailableSecurityManagerException 错误
+     *
+     * @return
+     */
+    @Bean
+    public FilterRegistrationBean delegatingFilterProxy() {
+        FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
+        DelegatingFilterProxy proxy = new DelegatingFilterProxy();
+        proxy.setTargetFilterLifecycle(true);
+        proxy.setTargetBeanName("shiroFilter");
+        filterRegistrationBean.setFilter(proxy);
+        return filterRegistrationBean;
+    }
+
     /** ===================================================================================================== 以下 rememberMe 的配置 */
 
     /**
@@ -79,8 +97,8 @@ public class ShiroConfig {
         // 防止xss读取cookie
         simpleCookie.setHttpOnly(true);
         simpleCookie.setPath("/");
-        // <!-- 记住我cookie生效时间30天 ,单位秒;-->
-        simpleCookie.setMaxAge(2592000);
+        // <!-- 记住我cookie生效时间1天 ,单位秒;-->
+        simpleCookie.setMaxAge(86400);
         return simpleCookie;
     }
 

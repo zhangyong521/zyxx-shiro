@@ -2,6 +2,7 @@ package com.zyxx.common.authorization;
 
 import com.zyxx.common.consts.SessionConst;
 import com.zyxx.common.entity.UserInfoSession;
+import com.zyxx.system.entity.UserInfo;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
@@ -84,6 +85,9 @@ public class ShiroUtils {
         return (UserInfoSession) getSessionAttribute(SessionConst.USER_INFO_SESSION);
     }
 
+    public static Object getPrincipal() {
+        return getSubject().getPrincipal();
+    }
     /**
      * 获得当前用户，以PrincipalCollection的形式
      *

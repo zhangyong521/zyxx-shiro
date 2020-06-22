@@ -76,9 +76,7 @@ public class LoginLogAspect {
             throw new LoginLogAspectException("记录登录日志，环绕切入异常");
         }
         UserInfo userInfo = userInfoService.getByUserName(loginLog.getUserName());
-        if (userInfo != null) {
-            loginLog.setUserId(userInfo.getId());
-        }
+        loginLog.setUserId((userInfo != null) ? userInfo.getId() : 0);
         String ip = IpUtils.getClientIp(request);
         loginLog.setIp(ip);
         loginLog.setLocation(AddressUtils.getAddress(ip));
@@ -90,6 +88,7 @@ public class LoginLogAspect {
         Browser browser = userAgent.getBrowser();
         OperatingSystem operatingSystem = userAgent.getOperatingSystem();
         loginLog.setDevice(browser.getName() + " -- " + operatingSystem.getName());
+
         loginLogService.save(loginLog);
 
         return result;

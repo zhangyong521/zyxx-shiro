@@ -1,12 +1,11 @@
 package com.zyxx.common.handler;
 
+import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.zyxx.common.authorization.ShiroUtils;
 import com.zyxx.common.consts.SqlPool;
-import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
-import com.zyxx.common.entity.UserInfoSession;
+import com.zyxx.system.entity.UserInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
-import org.apache.shiro.session.Session;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -23,9 +22,11 @@ public class FillMetaObjectHandler implements MetaObjectHandler {
 
     @Override
     public void insertFill(MetaObject metaObject) {
-        UserInfoSession ui = ShiroUtils.getCurrentUser();
-        log.info("FillMetaObjectHandler 自动设置创建人id：{}", ui.getUserInfo().getId());
-        this.strictInsertFill(metaObject, "createUser", Integer.class, ui.getUserInfo().getId());
+        UserInfo userInfo = (UserInfo) ShiroUtils.getPrincipal();
+         if (userInfo != null) {
+            log.info("FillMetaObjectHandler 自动设置创建人id：{}", userInfo.getId());
+            this.strictInsertFill(metaObject, "createUser", Integer.class, userInfo.getId());
+         }
         this.strictInsertFill(metaObject, "createTime", Date.class, new Date(System.currentTimeMillis()));
         this.strictInsertFill(metaObject, "status", Integer.class, SqlPool.STATUS_NORMAL);
     }
