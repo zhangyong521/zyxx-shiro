@@ -1,4 +1,4 @@
-package com.zyxx.jvm.entity;
+package com.zyxx.monitor.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

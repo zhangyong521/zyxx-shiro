@@ -29,13 +29,19 @@ public class RoleInfo extends BaseEntity {
     private Integer id;
 
     /**
+     * 角色标识
+     */
+    @TableField("role")
+    private String role;
+
+    /**
      * 角色名称
      */
     @TableField("name")
     private String name;
 
     /**
-     * 描述
+     * 角色描述
      */
     @TableField("description")
     private String description;

@@ -13,15 +13,15 @@
                     <form class="layui-form" id="searchForm" lay-filter="searchFormFilter">
                         <div class="layui-form-item">
                             <div class="layui-inline">
-                                <label class="layui-form-label">标识</label>
+                                <label class="layui-form-label">角色标识</label>
                                 <div class="layui-input-inline">
-                                    <input type="text" name="name" lay-verify="required" autocomplete="off" placeholder="请输入" class="layui-input">
+                                    <input type="text" name="role" lay-verify="required" autocomplete="off" placeholder="请输入" class="layui-input">
                                 </div>
                             </div>
                             <div class="layui-inline">
-                                <label class="layui-form-label">名称</label>
+                                <label class="layui-form-label">角色名称</label>
                                 <div class="layui-input-inline">
-                                    <input type="text" name="description" lay-verify="required" autocomplete="off" placeholder="请输入" class="layui-input">
+                                    <input type="text" name="name" lay-verify="required" autocomplete="off" placeholder="请输入" class="layui-input">
                                 </div>
                             </div>
                             <div class="layui-inline">
@@ -61,25 +61,31 @@
 <div id="addModel" class="layui-model">
     <form class="layui-form" id="addForm" lay-filter="addFormFilter">
         <div class="layui-form-item">
-            <label class="layui-form-label">标识</label>
+            <label class="layui-form-label">角色标识</label>
+            <div class="layui-input-block">
+                <input type="text" name="role" lay-verify="required" autocomplete="off" placeholder="请输入" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">角色名称</label>
             <div class="layui-input-block">
                 <input type="text" name="name" lay-verify="required" autocomplete="off" placeholder="请输入" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">名称</label>
+            <label class="layui-form-label">角色描述</label>
             <div class="layui-input-block">
                 <input type="text" name="description" lay-verify="required" autocomplete="off" placeholder="请输入" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">排序</label>
+            <label class="layui-form-label">角色排序</label>
             <div class="layui-input-block">
                 <input type="number" name="sort" value="0" lay-verify="required" autocomplete="off" placeholder="请输入" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">权限</label>
+            <label class="layui-form-label">角色权限</label>
             <div class="layui-input-block">
                 <div id="xmSelectAdd"></div>
             </div>
@@ -93,25 +99,31 @@
 <div id="updateModel" class="layui-model">
     <form class="layui-form" id="updateForm" lay-filter="updateFormFilter">
         <div class="layui-form-item">
-            <label class="layui-form-label">标识</label>
+            <label class="layui-form-label">角色标识</label>
+            <div class="layui-input-block">
+                <input type="text" name="role" lay-verify="required" autocomplete="off" placeholder="请输入" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">角色名称</label>
             <div class="layui-input-block">
                 <input type="text" name="name" lay-verify="required" autocomplete="off" placeholder="请输入" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">名称</label>
+            <label class="layui-form-label">角色描述</label>
             <div class="layui-input-block">
                 <input type="text" name="description" lay-verify="required" autocomplete="off" placeholder="请输入" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">排序</label>
+            <label class="layui-form-label">角色排序</label>
             <div class="layui-input-block">
                 <input type="number" name="sort" lay-verify="required" autocomplete="off" placeholder="请输入" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">权限</label>
+            <label class="layui-form-label">角色权限</label>
             <div class="layui-input-block">
                 <div id="xmSelectUpdate"></div>
             </div>
@@ -179,9 +191,10 @@
             , cols: [[
                 // {type: 'checkbox'}
                 {type:'numbers', title: '序号'}
-                , {field: 'name', title: '标识', width: 120}
-                , {field: 'description', title: '名称', width: 100}
-                , {field: 'resourceName', title: '权限'}
+                , {field: 'role', title: '角色标识', width: 120}
+                , {field: 'name', title: '角色名称', width: 120}
+                , {field: 'description', title: '角色描述', width: 200}
+                , {field: 'resourceName', title: '角色权限'}
                 , {field: 'sort', title: '排序', width: 80, sort: true}
                 , {field: 'userName', title: '创建人', width: 100}
                 , {field: 'createTime', title: '创建时间', width: 160, sort: true}

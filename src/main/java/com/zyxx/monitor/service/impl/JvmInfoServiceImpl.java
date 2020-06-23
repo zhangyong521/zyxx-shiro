@@ -1,10 +1,10 @@
-package com.zyxx.jvm.service.impl;
+package com.zyxx.monitor.service.impl;
 
-import com.zyxx.jvm.entity.GarbageCollectorInfo;
-import com.zyxx.jvm.entity.JvmInfo;
-import com.zyxx.jvm.entity.MemoryManagerInfo;
-import com.zyxx.jvm.entity.MemoryPoolInfo;
-import com.zyxx.jvm.service.JvmInfoService;
+import com.zyxx.monitor.entity.GarbageCollectorInfo;
+import com.zyxx.monitor.entity.JvmInfo;
+import com.zyxx.monitor.entity.MemoryManagerInfo;
+import com.zyxx.monitor.entity.MemoryPoolInfo;
+import com.zyxx.monitor.service.JvmInfoService;
 import org.springframework.stereotype.Service;
 
 import java.lang.management.*;

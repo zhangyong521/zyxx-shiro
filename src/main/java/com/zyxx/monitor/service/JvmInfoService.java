@@ -1,6 +1,6 @@
-package com.zyxx.jvm.service;
+package com.zyxx.monitor.service;
 
-import com.zyxx.jvm.entity.JvmInfo;
+import com.zyxx.monitor.entity.JvmInfo;
 
 /**
  * @author Tellsea

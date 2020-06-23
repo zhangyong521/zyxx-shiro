@@ -1,6 +1,6 @@
-package com.zyxx.jvm.controller;
+package com.zyxx.monitor.controller;
 
-import com.zyxx.jvm.service.JvmInfoService;
+import com.zyxx.monitor.service.JvmInfoService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @date 2020-6-15
  */
 @Controller
-@RequestMapping("/jvm/jvmInfo")
+@RequestMapping("/monitor/jvmInfo")
 public class JvmInfoController {
 
     @Autowired
@@ -26,13 +26,13 @@ public class JvmInfoController {
     public String detailPage(Model model, int type) {
         model.addAttribute("jvmInfo", jvmInfoService.getJvmInfo());
         if (type == 1) {
-            return "jvm/jvm_info_system";
+            return "monitor/jvm_info_system";
         } else if (type == 2) {
-            return "jvm/jvm_info_runtime";
+            return "monitor/jvm_info_runtime";
         } else if (type == 3) {
-            return "jvm/jvm_info_thread";
+            return "monitor/jvm_info_thread";
         } else if (type == 4) {
-            return "jvm/jvm_info_memory";
+            return "monitor/jvm_info_memory";
         }
         return "error/404";
     }

@@ -17,14 +17,15 @@
         <if test="entity.name != null and entity.name != ''">
             and a.name like concat('%',#{entity.name},'%')
         </if>
-        <if test="entity.description != null and entity.description != ''">
-            and a.description like concat('%',#{entity.description},'%')
+        <if test="entity.role != null and entity.role != ''">
+            and a.role like concat('%',#{entity.role},'%')
         </if>
         order by a.sort
     </select>
 
     <select id="listRoleInfoByTable" resultType="com.zyxx.system.entity.RoleInfo">
-        select a.*, GROUP_CONCAT(c.id) resource_ids, GROUP_CONCAT(c.name) resource_name, d.user_name
+        select a.id, a.role, a.`name`, a.description, a.sort, a.create_user, a.create_time, a.`status`,
+        GROUP_CONCAT(c.id) resource_ids, GROUP_CONCAT(c.name) resource_name, d.user_name
         from role_info a
         left join map_role_resource b on a.id = b.role_id
         left join resource_info c on b.resource_id = c.id
@@ -33,16 +34,16 @@
         <if test="entity.name != null and entity.name != ''">
             and a.name like concat('%',#{entity.name},'%')
         </if>
-        <if test="entity.description != null and entity.description != ''">
-            and a.description like concat('%',#{entity.description},'%')
+        <if test="entity.role != null and entity.role != ''">
+            and a.role like concat('%',#{entity.role},'%')
         </if>
         group by a.id
-        order by a.sort
+        order by a.sort, a.create_time desc
         limit #{entity.page}, #{entity.limit}
     </select>
 
     <select id="listRoleInfoByUserId" resultType="com.zyxx.system.entity.RoleInfo">
-        select distinct c.id role_id, c.`name` role_name, c.description
+        select distinct c.id role_id, c.role, c.`name` role_name, c.description
         from user_info a
         left join map_user_role b on a.id = b.user_id
         left join role_info c on b.role_id = c.id

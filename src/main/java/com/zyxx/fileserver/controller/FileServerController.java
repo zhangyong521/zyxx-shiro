@@ -65,7 +65,7 @@ public class FileServerController {
     }
 
     @ApiOperation("下载文件")
-    @PostMapping("downloadFile")
+    @PostMapping("/downloadFile")
     public void downloadFile(String filePath, String fileName, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
         fileServerService.downloadFile(filePath, fileName, request, response);
     }

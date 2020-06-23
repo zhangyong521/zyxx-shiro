@@ -93,11 +93,4 @@ public class ViewSystemController {
     public String loginLogPage() {
         return "system/login_log_list";
     }
-
-    @ApiOperation("权限测试页")
-    @GetMapping("/authorization/testPage")
-    public String authorizationTestPage() {
-        return "system/authorization_test";
-    }
-
 }
