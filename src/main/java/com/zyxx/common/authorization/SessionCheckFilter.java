@@ -29,19 +29,26 @@ public class SessionCheckFilter extends AccessControlFilter {
     @Override
     protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {
         Subject subject = ShiroUtils.getSubject();
-        if (subject.isRemembered()) {
-            UserInfoSession currentUser = ShiroUtils.getCurrentUser();
+        UserInfoSession currentUser = ShiroUtils.getCurrentUser();
+        UserInfo userInfo = (UserInfo) ShiroUtils.getPrincipal();
+
+        if (subject.isAuthenticated()) {
+            log.info("授权进入");
+        } else if (subject.isRemembered()) {
+            log.info("记住我进入");
             if (currentUser == null) {
                 // 关闭浏览器，重新进入，session丢失，通过shiro这里再次刷新session
-                UserInfo userInfo = (UserInfo) ShiroUtils.getPrincipal();
                 if (userInfo == null) {
                     // shiro 也为空，重新登录
                     WebUtils.issueRedirect(request, response, "/login");
                     return false;
+                } else {
+                    userInfoService.saveSession(userInfo.getUserName());
+                    log.info("记住我: 刷新session: {}", userInfo.getUserName());
                 }
-                userInfoService.saveSession(userInfo.getUserName());
-                log.info("记住我进入，刷新session: {}", userInfo.getUserName());
             }
+        } else {
+            log.info("没有登录");
         }
         return true;
     }

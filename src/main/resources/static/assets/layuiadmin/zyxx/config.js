@@ -61,12 +61,12 @@ function createFilter(table, filterId) {
     });
 
     // 监听行单击事件
-    /*table.on('row(' + filterId + ')', function (obj) {
+    table.on('row(' + filterId + ')', function (obj) {
         eval('globalActive.' + obj.event + "('" + JSON.stringify(obj.data) + "')");
-    });*/
+    });
 
     // 监听行双击事件
-    /*table.on('rowDouble(' + filterId + ')', function (obj) {
+    table.on('rowDouble(' + filterId + ')', function (obj) {
         eval('globalActive.' + obj.event + "('" + JSON.stringify(obj.data) + "')");
-    });*/
+    });
 }

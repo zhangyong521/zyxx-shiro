@@ -145,6 +145,7 @@
             , $ = layui.jquery;
 
         var xsOption = {
+            name: 'resourceIds',
             autoRow: true,
             filterable: true,
             direction: 'down',
@@ -236,7 +237,6 @@
             add: function () {
                 zyxx.openForm('新增角色', 'addModel', 'addForm', false, 500, 500, function () {
                     form.on('submit(addFormSubmitFilter)', function (obj) {
-                        obj.field.resourceIds = xmSelectAdd.getValue('valueStr');
                         if (zyxx.isEmpty(obj.field.resourceIds)) {
                             layer.msg('请选择权限', {time: 2000, icon: 2});
                             xmSelectAdd.warning('#e54d42', true);
@@ -276,7 +276,6 @@
                 zyxx.openForm('更新角色', 'updateModel', 'updateForm', false, 500, 500, function () {
                     form.on('submit(updateFormSubmitFilter)', function (obj) {
                         obj.field.id = data.id;
-                        obj.field.resourceIds = xmSelectUpdate.getValue('valueStr');
                         if (zyxx.isEmpty(obj.field.resourceIds)) {
                             layer.msg('请选择权限', {time: 2000, icon: 2});
                             xmSelectUpdate.warning('#e54d42', true);

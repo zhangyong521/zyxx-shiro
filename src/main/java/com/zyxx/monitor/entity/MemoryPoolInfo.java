@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import javax.management.ObjectName;
+
 /**
  * vm各内存区信息
  *
@@ -19,7 +21,7 @@ public class MemoryPoolInfo {
 
     private String poolName;
     private String poolMemoryManagerNames;
-    private String poolObjectName;
+    private ObjectName poolObjectName;
     private long poolInit;
     private long poolMax;
     private long poolUsed;

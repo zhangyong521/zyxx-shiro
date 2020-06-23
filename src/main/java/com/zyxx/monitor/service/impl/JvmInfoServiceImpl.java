@@ -144,7 +144,7 @@ public class JvmInfoServiceImpl implements JvmInfoService {
         System.out.println("jvm规范名称:" + runtime.getSpecName());
         entity.setRuntimeSpecName(runtime.getSpecName());
         System.out.println("jvm规范运营商:" + runtime.getSpecVendor());
-        entity.setRuntimeSpecVersion(runtime.getSpecVendor());
+        entity.setRuntimeSpecVendor(runtime.getSpecVendor());
         System.out.println("jvm规范版本:" + runtime.getSpecVersion());
         entity.setRuntimeSpecVersion(runtime.getSpecVersion());
         //返回虚拟机在毫秒内的开始时间。该方法返回了虚拟机启动时的近似时间
@@ -203,10 +203,10 @@ public class JvmInfoServiceImpl implements JvmInfoService {
             System.out.println("垃圾收集器：名称=" + garbage.getName() + ",收集=" + garbage.getCollectionCount() + ",总花费时间="
                     + garbage.getCollectionTime() + ",内存区名称=" + Arrays.deepToString(garbage.getMemoryPoolNames()));
             list.add(new GarbageCollectorInfo()
-            .setGarbageName(garbage.getName())
-            .setGarbageCollectionCount(garbage.getCollectionCount())
-            .setGarbageCollectionTime(garbage.getCollectionTime())
-            .setGarbageMemoryPoolNames(Arrays.deepToString(garbage.getMemoryPoolNames())));
+                    .setGarbageName(garbage.getName())
+                    .setGarbageCollectionCount(garbage.getCollectionCount())
+                    .setGarbageCollectionTime(garbage.getCollectionTime())
+                    .setGarbageMemoryPoolNames(Arrays.deepToString(garbage.getMemoryPoolNames())));
         }
         entity.setGarbageCollectorInfos(list);
     }
@@ -254,12 +254,13 @@ public class JvmInfoServiceImpl implements JvmInfoService {
                         + "\n\t已提交(已申请)(M)=" + pool.getUsage().getCommitted() / MB
                         + "\n\t使用率=" + (pool.getUsage().getUsed() * 100 / pool.getUsage().getCommitted()) + "%");
                 list.add(new MemoryPoolInfo()
-                .setPoolName(pool.getName())
-                .setPoolMemoryManagerNames(Arrays.deepToString(pool.getMemoryManagerNames()))
-                .setPoolMax(pool.getUsage().getMax() / MB)
-                .setPoolUsed(pool.getUsage().getUsed() / MB)
-                .setPoolCommitted(pool.getUsage().getCommitted() / MB)
-                .setPoolUseRate((pool.getUsage().getUsed() * 100 / pool.getUsage().getCommitted()) + "%"));
+                        .setPoolName(pool.getName())
+                        .setPoolObjectName(pool.getObjectName())
+                        .setPoolMemoryManagerNames(Arrays.deepToString(pool.getMemoryManagerNames()))
+                        .setPoolMax(pool.getUsage().getMax() / MB)
+                        .setPoolUsed(pool.getUsage().getUsed() / MB)
+                        .setPoolCommitted(pool.getUsage().getCommitted() / MB)
+                        .setPoolUseRate((pool.getUsage().getUsed() * 100 / pool.getUsage().getCommitted()) + "%"));
             }
             entity.setMemoryPoolInfos(list);
         }
