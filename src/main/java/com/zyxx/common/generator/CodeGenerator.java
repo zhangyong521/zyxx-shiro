@@ -37,7 +37,7 @@ public class CodeGenerator {
     // @author 值
     private static final String AUTHOR = "Tellsea";
     // 模块名称
-    private static final String MODULE_NAME = "test";
+    private static final String MODULE_NAME = "system";
     // 包的基础路径
     private static final String BASE_PACKAGE_URL = "com.zyxx";
     // xml文件路径

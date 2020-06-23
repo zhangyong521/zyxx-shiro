@@ -124,6 +124,6 @@ public class MysqlDump extends BaseEntity {
     /**
      * 状态(1正常，2删除)
      */
-    @TableField(fill = FieldFill.INSERT)
+    @TableField(value = "status", fill = FieldFill.INSERT)
     private Integer status;
 }

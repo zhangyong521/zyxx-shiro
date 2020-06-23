@@ -33,9 +33,9 @@ public class SessionCheckFilter extends AccessControlFilter {
         UserInfo userInfo = (UserInfo) ShiroUtils.getPrincipal();
 
         if (subject.isAuthenticated()) {
-            log.info("授权进入");
+            // log.info("授权进入");
         } else if (subject.isRemembered()) {
-            log.info("记住我进入");
+            // log.info("记住我进入");
             if (currentUser == null) {
                 // 关闭浏览器，重新进入，session丢失，通过shiro这里再次刷新session
                 if (userInfo == null) {
@@ -44,11 +44,11 @@ public class SessionCheckFilter extends AccessControlFilter {
                     return false;
                 } else {
                     userInfoService.saveSession(userInfo.getUserName());
-                    log.info("记住我: 刷新session: {}", userInfo.getUserName());
+                    // log.info("记住我: 刷新session: {}", userInfo.getUserName());
                 }
             }
         } else {
-            log.info("没有登录");
+            // log.info("没有登录");
         }
         return true;
     }

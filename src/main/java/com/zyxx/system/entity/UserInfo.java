@@ -1,5 +1,6 @@
 package com.zyxx.system.entity;
 
+import com.zyxx.common.annotation.Dict;
 import com.zyxx.common.entity.BaseEntity;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.*;
@@ -69,6 +70,7 @@ public class UserInfo extends BaseEntity {
      * 性别 1男 2女
      */
     @TableField("sex")
+    @Dict(dictType = "user_info_sex")
     private Integer sex;
 
     /**
