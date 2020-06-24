@@ -1,21 +1,72 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : 127.0.0.1
+ Source Server         : localhost
  Source Server Type    : MySQL
  Source Server Version : 50713
- Source Host           : 127.0.0.1:3306
+ Source Host           : localhost:3306
  Source Schema         : zyxx_shiro
 
  Target Server Type    : MySQL
  Target Server Version : 50713
  File Encoding         : 65001
 
- Date: 17/06/2020 15:50:18
+ Date: 24/06/2020 12:39:26
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for dict_data
+-- ----------------------------
+DROP TABLE IF EXISTS `dict_data`;
+CREATE TABLE `dict_data`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '字典主键',
+  `text` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '字典标签',
+  `value` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '字典键值',
+  `type` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '字典类型',
+  `css_class` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '样式属性（其他样式扩展）',
+  `list_class` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '表格回显样式',
+  `is_default` tinyint(4) NULL DEFAULT 0 COMMENT '是否默认（Y是 N否）',
+  `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `sort` int(4) NULL DEFAULT 0 COMMENT '字典排序',
+  `create_user` int(11) NULL DEFAULT 0 COMMENT '创建人',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `status` tinyint(4) NULL DEFAULT 0 COMMENT '状态（1正常 2停用）',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '字典数据表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of dict_data
+-- ----------------------------
+INSERT INTO `dict_data` VALUES (1, '男', '1', 'user_info_sex', NULL, NULL, 0, '用户性别', 0, 1, '2020-06-23 17:02:04', 1);
+INSERT INTO `dict_data` VALUES (2, '女', '2', 'user_info_sex', NULL, NULL, 0, '用户性别', 0, 1, '2020-06-23 17:02:04', 1);
+INSERT INTO `dict_data` VALUES (3, '保密', '3', 'user_info_sex', NULL, NULL, 0, '用户性别', 0, 1, '2020-06-23 17:02:04', 1);
+INSERT INTO `dict_data` VALUES (4, '未知', '4', 'user_info_sex', NULL, NULL, 0, '2', 0, 1, '2020-06-24 11:53:29', 1);
+
+-- ----------------------------
+-- Table structure for dict_type
+-- ----------------------------
+DROP TABLE IF EXISTS `dict_type`;
+CREATE TABLE `dict_type`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '字典主键',
+  `name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '字典名称',
+  `type` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '字典类型',
+  `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `sort` int(4) NULL DEFAULT 0 COMMENT '字典排序',
+  `create_user` int(11) NULL DEFAULT 0 COMMENT '创建人',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `status` tinyint(4) NULL DEFAULT 0 COMMENT '状态（1正常 2停用）',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `dict_type`(`type`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '字典类型表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of dict_type
+-- ----------------------------
+INSERT INTO `dict_type` VALUES (1, '用户性别', 'user_info_sex', '用户性别列表', 0, 1, '2020-06-23 17:27:31', 1);
+INSERT INTO `dict_type` VALUES (2, '用户状态', 'user_info_status', '用户状态列表', 0, 1, '2020-06-24 11:02:33', 1);
 
 -- ----------------------------
 -- Table structure for login_log
@@ -24,6 +75,7 @@ DROP TABLE IF EXISTS `login_log`;
 CREATE TABLE `login_log`  (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
   `user_id` int(11) NULL DEFAULT NULL COMMENT '用户id',
+  `user_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '用户名',
   `ip` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'IP地址',
   `location` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '登录地点',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '登录时间',
@@ -32,47 +84,89 @@ CREATE TABLE `login_log`  (
   `message` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '消息',
   `status` tinyint(1) NULL DEFAULT 0 COMMENT '状态 1 正常 2 删除',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 37 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 79 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of login_log
 -- ----------------------------
-INSERT INTO `login_log` VALUES (1, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-15 15:54:45', 'Chrome -- Windows 10', 200, 'OK', 1);
-INSERT INTO `login_log` VALUES (2, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-15 15:57:29', 'Chrome -- Windows 10', 200, 'OK', 1);
-INSERT INTO `login_log` VALUES (3, 1, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-15 15:59:14', 'Chrome -- Windows 10', 200, '登录成功', 1);
-INSERT INTO `login_log` VALUES (4, 1, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-15 17:05:21', 'Internet Explorer 11 -- Windows 10', 200, '登录成功', 1);
-INSERT INTO `login_log` VALUES (5, 1, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-15 17:05:47', 'Chrome -- Windows 10', 200, '登录成功', 1);
-INSERT INTO `login_log` VALUES (6, 1, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-15 17:51:04', 'Chrome -- Windows 10', 200, '登录成功', 1);
-INSERT INTO `login_log` VALUES (7, 1, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-15 18:04:12', 'Chrome -- Windows 10', 200, '登录成功', 1);
-INSERT INTO `login_log` VALUES (8, 1, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-16 09:37:52', 'Chrome -- Windows 10', 200, '登录成功', 1);
-INSERT INTO `login_log` VALUES (9, 1, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-16 11:24:54', 'Chrome -- Windows 10', 200, '登录成功', 1);
-INSERT INTO `login_log` VALUES (10, 1, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-16 12:44:45', 'Chrome -- Windows 10', 200, '登录成功', 1);
-INSERT INTO `login_log` VALUES (11, 1, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-16 13:24:34', 'Chrome -- Windows 10', 200, '登录成功', 1);
-INSERT INTO `login_log` VALUES (12, 1, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-16 14:18:33', 'Chrome -- Windows 10', 200, '登录成功', 1);
-INSERT INTO `login_log` VALUES (13, 1, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-16 14:35:54', 'Chrome -- Windows 10', 200, '登录成功', 1);
-INSERT INTO `login_log` VALUES (14, 1, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-16 17:21:17', 'Chrome -- Windows 10', 200, '登录成功', 1);
-INSERT INTO `login_log` VALUES (15, 1, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-16 17:25:35', 'Chrome -- Windows 10', 200, '登录成功', 1);
-INSERT INTO `login_log` VALUES (16, 1, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-16 19:57:44', 'Chrome -- Windows 10', 200, '登录成功', 1);
-INSERT INTO `login_log` VALUES (17, 1, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-17 09:21:57', 'Chrome -- Windows 10', 200, '登录成功', 1);
-INSERT INTO `login_log` VALUES (18, 1, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-17 09:59:46', 'Chrome -- Windows 10', 200, '登录成功', 1);
-INSERT INTO `login_log` VALUES (19, 1, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-17 10:32:26', 'Chrome 8 -- Windows 10', 200, '登录成功', 1);
-INSERT INTO `login_log` VALUES (20, 1, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-17 10:33:56', 'Chrome Mobile -- Android 1.x', 200, '登录成功', 1);
-INSERT INTO `login_log` VALUES (21, 1, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-17 10:35:33', 'Chrome 65 -- Windows 10', 200, '登录成功', 1);
-INSERT INTO `login_log` VALUES (22, 1, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-17 10:35:55', 'Chrome -- Windows 10', 200, '登录成功', 1);
-INSERT INTO `login_log` VALUES (23, 1, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-17 10:38:34', 'Chrome -- Windows 10', 200, '登录成功', 1);
-INSERT INTO `login_log` VALUES (24, 1, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-17 10:39:20', 'Chrome Mobile -- Android 1.x', 200, '登录成功', 1);
-INSERT INTO `login_log` VALUES (25, 1, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-17 10:39:52', 'Chrome 8 -- Windows 7', 200, '登录成功', 1);
-INSERT INTO `login_log` VALUES (26, 1, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-17 10:42:56', 'Chrome 8 -- Windows 10', 200, '登录成功', 1);
-INSERT INTO `login_log` VALUES (27, 1, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-17 10:45:37', 'Chrome 8 -- Windows 10', 200, '登录成功', 1);
-INSERT INTO `login_log` VALUES (28, 1, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-17 10:50:20', 'Chrome Mobile -- Android 1.x', 200, '登录成功', 1);
-INSERT INTO `login_log` VALUES (29, 1, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-17 11:15:44', 'Chrome -- Windows 10', 200, '登录成功', 1);
-INSERT INTO `login_log` VALUES (30, 1, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-17 11:26:10', 'Chrome Mobile -- Android Mobile', 200, '登录成功', 1);
-INSERT INTO `login_log` VALUES (31, 1, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-17 11:32:53', 'Chrome -- Windows 10', 200, '登录成功', 1);
-INSERT INTO `login_log` VALUES (32, 1, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-17 11:38:28', 'Chrome 8 -- Windows 10', 200, '登录成功', 1);
-INSERT INTO `login_log` VALUES (33, 1, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-17 12:38:24', 'Chrome -- Windows 10', 200, '登录成功', 1);
-INSERT INTO `login_log` VALUES (34, 1, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-17 14:36:13', 'Chrome -- Windows 10', 200, '登录成功', 1);
-INSERT INTO `login_log` VALUES (35, 1, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-17 14:38:40', 'Chrome -- Windows 10', 200, '登录成功', 1);
-INSERT INTO `login_log` VALUES (36, 1, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-17 14:38:59', 'Chrome -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (1, 1, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-15 15:54:45', 'Chrome -- Windows 10', 200, 'OK', 1);
+INSERT INTO `login_log` VALUES (2, 1, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-15 15:57:29', 'Chrome -- Windows 10', 200, 'OK', 1);
+INSERT INTO `login_log` VALUES (3, 1, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-15 15:59:14', 'Chrome -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (4, 1, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-15 17:05:21', 'Internet Explorer 11 -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (5, 1, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-15 17:05:47', 'Chrome -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (6, 1, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-15 17:51:04', 'Chrome -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (7, 1, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-15 18:04:12', 'Chrome -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (8, 1, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-16 09:37:52', 'Chrome -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (9, 1, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-16 11:24:54', 'Chrome -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (10, 1, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-16 12:44:45', 'Chrome -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (11, 1, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-16 13:24:34', 'Chrome -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (12, 1, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-16 14:18:33', 'Chrome -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (13, 1, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-16 14:35:54', 'Chrome -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (14, 1, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-16 17:21:17', 'Chrome -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (15, 1, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-16 17:25:35', 'Chrome -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (16, 1, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-16 19:57:44', 'Chrome -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (17, 1, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-17 09:21:57', 'Chrome -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (18, 1, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-17 09:59:46', 'Chrome -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (19, 1, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-17 10:32:26', 'Chrome 8 -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (20, 1, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-17 10:33:56', 'Chrome Mobile -- Android 1.x', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (21, 1, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-17 10:35:33', 'Chrome 65 -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (22, 1, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-17 10:35:55', 'Chrome -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (23, 1, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-17 10:38:34', 'Chrome -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (24, 1, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-17 10:39:20', 'Chrome Mobile -- Android 1.x', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (25, 1, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-17 10:39:52', 'Chrome 8 -- Windows 7', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (26, 1, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-17 10:42:56', 'Chrome 8 -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (27, 1, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-17 10:45:37', 'Chrome 8 -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (28, 1, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-17 10:50:20', 'Chrome Mobile -- Android 1.x', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (29, 1, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-17 11:15:44', 'Chrome -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (30, 1, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-17 11:26:10', 'Chrome Mobile -- Android Mobile', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (31, 1, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-17 11:32:53', 'Chrome -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (32, 1, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-17 11:38:28', 'Chrome 8 -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (33, 1, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-17 12:38:24', 'Chrome -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (34, 1, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-17 14:36:13', 'Chrome -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (35, 1, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-17 14:38:40', 'Chrome -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (36, 1, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-17 14:38:59', 'Chrome -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (37, 1, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-22 09:39:13', 'Chrome 8 -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (38, 1, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-22 13:19:30', 'Chrome 8 -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (39, 1, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-22 14:39:01', 'Chrome 8 -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (40, 1, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-22 14:41:24', 'Chrome 8 -- Windows 10', 500, '验证码错误!', 1);
+INSERT INTO `login_log` VALUES (41, 1, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-22 14:41:31', 'Chrome 8 -- Windows 10', 500, '用户不存在!', 1);
+INSERT INTO `login_log` VALUES (42, 1, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-22 14:41:39', 'Chrome 8 -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (43, 1, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-22 14:43:55', 'Chrome 8 -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (44, 1, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-22 14:44:58', 'Chrome 8 -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (45, 1, NULL, '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-22 14:58:50', 'Chrome 8 -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (46, 1, 'admin', '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-22 15:18:33', 'Chrome 8 -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (47, 0, 'admin啊', '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-22 15:18:50', 'Chrome 8 -- Windows 10', 500, '用户不存在!', 1);
+INSERT INTO `login_log` VALUES (48, 0, 'admin啊', '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-22 15:18:56', 'Chrome 8 -- Windows 10', 500, '用户不存在!', 1);
+INSERT INTO `login_log` VALUES (49, 0, 'admin啊', '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-22 15:18:57', 'Chrome 8 -- Windows 10', 500, '用户不存在!', 1);
+INSERT INTO `login_log` VALUES (50, 0, 'admin啊', '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-22 15:18:57', 'Chrome 8 -- Windows 10', 500, '用户不存在!', 1);
+INSERT INTO `login_log` VALUES (51, 0, 'admin啊', '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-22 15:18:57', 'Chrome 8 -- Windows 10', 500, '用户不存在!', 1);
+INSERT INTO `login_log` VALUES (52, 0, 'admin啊', '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-22 15:18:57', 'Chrome 8 -- Windows 10', 500, '用户不存在!', 1);
+INSERT INTO `login_log` VALUES (53, 0, 'admin啊', '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-22 15:18:57', 'Chrome 8 -- Windows 10', 500, '用户不存在!', 1);
+INSERT INTO `login_log` VALUES (54, 0, 'admin啊', '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-22 15:18:58', 'Chrome 8 -- Windows 10', 500, '用户不存在!', 1);
+INSERT INTO `login_log` VALUES (55, 0, 'admin啊', '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-22 15:18:58', 'Chrome 8 -- Windows 10', 500, '用户不存在!', 1);
+INSERT INTO `login_log` VALUES (56, 0, 'admin啊', '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-22 15:18:58', 'Chrome 8 -- Windows 10', 500, '用户不存在!', 1);
+INSERT INTO `login_log` VALUES (57, 0, 'admin啊', '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-22 15:18:58', 'Chrome 8 -- Windows 10', 500, '用户不存在!', 1);
+INSERT INTO `login_log` VALUES (58, 0, 'admin啊', '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-22 15:18:58', 'Chrome 8 -- Windows 10', 500, '用户不存在!', 1);
+INSERT INTO `login_log` VALUES (59, 0, 'admin啊', '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-22 15:18:58', 'Chrome 8 -- Windows 10', 500, '用户不存在!', 1);
+INSERT INTO `login_log` VALUES (60, 1, 'admin', '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-22 15:19:13', 'Chrome 8 -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (61, NULL, 'admin啊', '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-22 15:21:01', 'Chrome 8 -- Windows 10', 500, '用户不存在!', 1);
+INSERT INTO `login_log` VALUES (62, NULL, 'admin', '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-22 15:21:06', 'Chrome 8 -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (63, 1, 'admin', '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-22 15:22:07', 'Chrome 8 -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (64, 1, 'admin', '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-22 15:27:35', 'Chrome 8 -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (65, 1, 'admin', '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-22 15:28:51', 'Chrome 8 -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (66, 1, 'admin', '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-22 15:30:55', 'Chrome 8 -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (67, 1, 'admin', '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-22 15:38:45', 'Chrome 8 -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (68, 1, 'admin', '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-22 15:39:54', 'Chrome 8 -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (69, 1, 'admin', '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-22 15:41:40', 'Chrome 8 -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (70, 1, 'admin', '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-22 15:42:21', 'Chrome 8 -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (71, 1, 'admin', '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-22 16:12:37', 'Chrome 8 -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (72, 1, 'admin', '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-22 17:31:41', 'Chrome 8 -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (73, 1, 'admin', '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-22 17:42:35', 'Chrome 8 -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (74, 1, 'admin', '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-23 09:26:20', 'Chrome 8 -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (75, 1, 'admin', '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-23 11:50:04', 'Chrome 8 -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (76, 1, 'admin', '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-23 11:58:38', 'Chrome 8 -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (77, 1, 'admin', '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-23 17:37:37', 'Chrome 8 -- Windows 10', 200, '登录成功', 1);
+INSERT INTO `login_log` VALUES (78, 1, 'admin', '127.0.0.1', '0|0|0|内网IP|内网IP', '2020-06-23 17:37:54', 'Chrome 8 -- Windows 10', 200, '登录成功', 1);
 
 -- ----------------------------
 -- Table structure for map_role_resource
@@ -83,7 +177,7 @@ CREATE TABLE `map_role_resource`  (
   `role_id` int(11) NOT NULL COMMENT '角色ID',
   `resource_id` int(11) NOT NULL COMMENT '菜单/按钮ID',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 285 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色资源关联表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 327 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色资源关联表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of map_role_resource
@@ -113,9 +207,6 @@ INSERT INTO `map_role_resource` VALUES (126, 4, 13);
 INSERT INTO `map_role_resource` VALUES (127, 4, 14);
 INSERT INTO `map_role_resource` VALUES (128, 4, 15);
 INSERT INTO `map_role_resource` VALUES (129, 4, 16);
-INSERT INTO `map_role_resource` VALUES (130, 5, 1);
-INSERT INTO `map_role_resource` VALUES (131, 5, 4);
-INSERT INTO `map_role_resource` VALUES (132, 5, 12);
 INSERT INTO `map_role_resource` VALUES (153, 8, 1);
 INSERT INTO `map_role_resource` VALUES (154, 8, 4);
 INSERT INTO `map_role_resource` VALUES (155, 8, 12);
@@ -218,6 +309,48 @@ INSERT INTO `map_role_resource` VALUES (281, 19, 15);
 INSERT INTO `map_role_resource` VALUES (282, 19, 16);
 INSERT INTO `map_role_resource` VALUES (283, 19, 30);
 INSERT INTO `map_role_resource` VALUES (284, 19, 31);
+INSERT INTO `map_role_resource` VALUES (285, 20, 9);
+INSERT INTO `map_role_resource` VALUES (286, 20, 10);
+INSERT INTO `map_role_resource` VALUES (287, 20, 11);
+INSERT INTO `map_role_resource` VALUES (288, 20, 12);
+INSERT INTO `map_role_resource` VALUES (289, 20, 13);
+INSERT INTO `map_role_resource` VALUES (290, 20, 14);
+INSERT INTO `map_role_resource` VALUES (291, 20, 15);
+INSERT INTO `map_role_resource` VALUES (292, 20, 16);
+INSERT INTO `map_role_resource` VALUES (293, 20, 17);
+INSERT INTO `map_role_resource` VALUES (294, 20, 18);
+INSERT INTO `map_role_resource` VALUES (295, 20, 19);
+INSERT INTO `map_role_resource` VALUES (296, 20, 20);
+INSERT INTO `map_role_resource` VALUES (297, 20, 21);
+INSERT INTO `map_role_resource` VALUES (298, 20, 22);
+INSERT INTO `map_role_resource` VALUES (299, 20, 23);
+INSERT INTO `map_role_resource` VALUES (300, 20, 24);
+INSERT INTO `map_role_resource` VALUES (301, 20, 25);
+INSERT INTO `map_role_resource` VALUES (302, 20, 26);
+INSERT INTO `map_role_resource` VALUES (303, 20, 27);
+INSERT INTO `map_role_resource` VALUES (304, 20, 28);
+INSERT INTO `map_role_resource` VALUES (305, 20, 30);
+INSERT INTO `map_role_resource` VALUES (306, 20, 31);
+INSERT INTO `map_role_resource` VALUES (307, 20, 32);
+INSERT INTO `map_role_resource` VALUES (308, 20, 34);
+INSERT INTO `map_role_resource` VALUES (309, 21, 12);
+INSERT INTO `map_role_resource` VALUES (310, 21, 13);
+INSERT INTO `map_role_resource` VALUES (311, 21, 14);
+INSERT INTO `map_role_resource` VALUES (312, 21, 15);
+INSERT INTO `map_role_resource` VALUES (313, 21, 16);
+INSERT INTO `map_role_resource` VALUES (314, 21, 30);
+INSERT INTO `map_role_resource` VALUES (315, 21, 31);
+INSERT INTO `map_role_resource` VALUES (316, 5, 4);
+INSERT INTO `map_role_resource` VALUES (317, 5, 12);
+INSERT INTO `map_role_resource` VALUES (318, 5, 1);
+INSERT INTO `map_role_resource` VALUES (319, 5, 13);
+INSERT INTO `map_role_resource` VALUES (320, 22, 12);
+INSERT INTO `map_role_resource` VALUES (321, 22, 13);
+INSERT INTO `map_role_resource` VALUES (322, 22, 14);
+INSERT INTO `map_role_resource` VALUES (323, 22, 15);
+INSERT INTO `map_role_resource` VALUES (324, 22, 16);
+INSERT INTO `map_role_resource` VALUES (325, 22, 30);
+INSERT INTO `map_role_resource` VALUES (326, 22, 31);
 
 -- ----------------------------
 -- Table structure for map_user_role
@@ -365,7 +498,7 @@ INSERT INTO `resource_info` VALUES (28, 8, '查询日志', NULL, NULL, 'loginLog
 INSERT INTO `resource_info` VALUES (30, 4, '导入用户', '', '', 'system:userInfo:import', 2, '', 30, 0, '2020-04-04 14:28:53', 1);
 INSERT INTO `resource_info` VALUES (31, 4, '导出用户', '', '', 'system:userInfo:export', 2, '', 31, 0, '2020-04-04 14:28:53', 1);
 INSERT INTO `resource_info` VALUES (32, 7, '导出日志', '', '', 'system:systemLog:export', 2, '', 27, 0, '2020-04-04 14:28:53', 1);
-INSERT INTO `resource_info` VALUES (33, 0, '啊', '啊', NULL, '啊', 2, '啊', 0, 1, '2020-06-16 17:21:30', 1);
+INSERT INTO `resource_info` VALUES (33, 0, '啊', '啊', NULL, '啊', 2, '啊', 4, 1, '2020-06-16 17:21:30', 1);
 INSERT INTO `resource_info` VALUES (34, 33, '哎哎', '哎哎', NULL, '哎哎', 1, '哎哎', 0, 1, '2020-06-16 17:27:02', 1);
 
 -- ----------------------------
@@ -374,29 +507,33 @@ INSERT INTO `resource_info` VALUES (34, 33, '哎哎', '哎哎', NULL, '哎哎', 
 DROP TABLE IF EXISTS `role_info`;
 CREATE TABLE `role_info`  (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '角色ID',
-  `name` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '角色名称',
-  `description` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '描述',
+  `role` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '角色标识',
+  `name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '角色名称',
+  `description` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '角色描述',
   `sort` int(11) NULL DEFAULT 0 COMMENT '排序',
   `create_user` int(11) NULL DEFAULT 0 COMMENT '创建人',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `status` tinyint(1) NULL DEFAULT 0 COMMENT '状态 1 正常 2删除',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 20 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 23 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of role_info
 -- ----------------------------
-INSERT INTO `role_info` VALUES (1, 'admin', '超级管理员', 0, 0, '2020-04-04 14:28:53', 1);
-INSERT INTO `role_info` VALUES (2, 'system', '系统管理员', 0, 0, '2020-04-04 14:28:53', 1);
-INSERT INTO `role_info` VALUES (3, 'monitor', '系统监控员', 0, 0, '2020-04-04 14:28:53', 1);
-INSERT INTO `role_info` VALUES (4, 'test', '测试', 0, 0, '2020-04-04 14:28:53', 1);
-INSERT INTO `role_info` VALUES (5, 'tigger', '测试001', 0, 0, '2020-04-04 14:28:53', 1);
-INSERT INTO `role_info` VALUES (7, 'boom', '测试002', 0, 0, '2020-04-04 14:28:53', 1);
-INSERT INTO `role_info` VALUES (8, 'dom', '测试003', 0, 0, '2020-04-04 14:28:53', 1);
-INSERT INTO `role_info` VALUES (16, 'aaa', '啊啊啊', 0, 0, '2020-04-04 16:20:56', 1);
-INSERT INTO `role_info` VALUES (17, 'fff', '发发发', 0, 0, '2020-04-04 16:55:27', 1);
-INSERT INTO `role_info` VALUES (18, 'ggg', '滚滚滚', 0, 0, '2020-04-04 17:00:07', 1);
-INSERT INTO `role_info` VALUES (19, 'aaaa', '打法撒旦法', 0, 1, '2020-06-16 15:09:14', 1);
+INSERT INTO `role_info` VALUES (1, 'admin', '超级管理员', '超级管理员的权限', 0, 1, '2020-04-04 14:28:53', 1);
+INSERT INTO `role_info` VALUES (2, 'system', '系统管理员', '系统管理员的权限', 0, 1, '2020-04-04 14:28:53', 1);
+INSERT INTO `role_info` VALUES (3, 'monitor', '系统监控员', '系统监控员的权限', 0, 1, '2020-04-04 14:28:53', 1);
+INSERT INTO `role_info` VALUES (4, 'test', '测试', '测试的权限', 0, 1, '2020-04-04 14:28:53', 1);
+INSERT INTO `role_info` VALUES (5, 'tigger', '测试001', '测试001的权限', 0, 1, '2020-04-04 14:28:53', 1);
+INSERT INTO `role_info` VALUES (7, 'boom', '测试002', '测试002的权限', 0, 1, '2020-04-04 14:28:53', 1);
+INSERT INTO `role_info` VALUES (8, 'dom', '测试003', '测试003的权限', 0, 1, '2020-04-04 14:28:53', 1);
+INSERT INTO `role_info` VALUES (16, 'aaa', '啊啊啊', '啊啊啊的权限', 0, 1, '2020-04-04 16:20:56', 1);
+INSERT INTO `role_info` VALUES (17, 'fff', '发发发', '发发发的权限', 0, 1, '2020-04-04 16:55:27', 1);
+INSERT INTO `role_info` VALUES (18, 'ggg', '滚滚滚', '滚滚滚的权限', 0, 1, '2020-04-04 17:00:07', 1);
+INSERT INTO `role_info` VALUES (19, 'aaaa', '打法撒旦法', '打法撒旦法的权限', 0, 1, '2020-06-16 15:09:14', 1);
+INSERT INTO `role_info` VALUES (20, 'test', '啊啊啊啊啊', '啊啊啊啊啊的权限', 0, 1, '2020-06-22 18:02:14', 1);
+INSERT INTO `role_info` VALUES (21, '测试呀', '测试呀', '测试啊的权限', 0, 1, '2020-06-23 10:10:45', 1);
+INSERT INTO `role_info` VALUES (22, '啊', '啊', '啊', 0, 1, '2020-06-23 10:29:15', 1);
 
 -- ----------------------------
 -- Table structure for system_log
@@ -415,15 +552,15 @@ CREATE TABLE `system_log`  (
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '操作时间',
   `status` int(2) NULL DEFAULT NULL COMMENT '状态(1正常，2删除)',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统日志表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 26 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统日志表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of system_log
 -- ----------------------------
-INSERT INTO `system_log` VALUES (1, 0, '更新角色', 24, 'cn.tellsea.sunday.system.controller.RoleInfoController.update()', '{\"roleInfo\":{\"description\":\"滚滚滚\",\"id\":18,\"limit\":0,\"name\":\"ggg\",\"page\":0,\"resourceIds\":\"3,10,11\",\"sort\":0}}', '127.0.0.1', '0|0|0|内网IP|内网IP', 'CHROME -- WINDOWS_10', '2020-04-04 19:09:17', 1);
-INSERT INTO `system_log` VALUES (2, 0, '更新角色', 75, 'cn.tellsea.sunday.system.controller.RoleInfoController.update()', '{\"roleInfo\":{\"description\":\"滚滚滚\",\"id\":18,\"limit\":0,\"name\":\"ggg\",\"page\":0,\"resourceIds\":\"3,10,11\",\"sort\":0}}', '127.0.0.1', '0|0|0|内网IP|内网IP', 'CHROME -- WINDOWS_10', '2020-04-05 09:16:56', 1);
-INSERT INTO `system_log` VALUES (3, 0, '更新角色', 138, 'cn.tellsea.sunday.system.controller.RoleInfoController.update()', '{\"roleInfo\":{\"description\":\"超级管理员\",\"id\":1,\"limit\":0,\"name\":\"admin\",\"page\":0,\"resourceIds\":\"1,4,12,13,14,15,16,5,17,18,19,20,6,21,22,23,24,7,25,26,8,27,28,2,9,3,10,11\",\"sort\":0}}', '127.0.0.1', '0|0|0|内网IP|内网IP', 'CHROME -- WINDOWS_10', '2020-04-18 13:32:08', 1);
-INSERT INTO `system_log` VALUES (4, 0, '更新菜单', 12, 'cn.tellsea.sunday.system.controller.ResourceInfoController.update()', '{\"resourceInfo\":{\"component\":\"/system\",\"icon\":\"shopping\",\"id\":1,\"limit\":0,\"name\":\"系统管理\",\"page\":0,\"perms\":\"system\",\"pid\":0,\"sort\":1,\"type\":1,\"url\":\"/system\"}}', '127.0.0.1', '0|0|0|内网IP|内网IP', 'CHROME -- WINDOWS_10', '2020-04-18 13:33:32', 1);
+INSERT INTO `system_log` VALUES (1, 1, '更新角色', 24, 'cn.tellsea.sunday.system.controller.RoleInfoController.update()', '{\"roleInfo\":{\"description\":\"滚滚滚\",\"id\":18,\"limit\":0,\"name\":\"ggg\",\"page\":0,\"resourceIds\":\"3,10,11\",\"sort\":0}}', '127.0.0.1', '0|0|0|内网IP|内网IP', 'CHROME -- WINDOWS_10', '2020-04-04 19:09:17', 1);
+INSERT INTO `system_log` VALUES (2, 1, '更新角色', 75, 'cn.tellsea.sunday.system.controller.RoleInfoController.update()', '{\"roleInfo\":{\"description\":\"滚滚滚\",\"id\":18,\"limit\":0,\"name\":\"ggg\",\"page\":0,\"resourceIds\":\"3,10,11\",\"sort\":0}}', '127.0.0.1', '0|0|0|内网IP|内网IP', 'CHROME -- WINDOWS_10', '2020-04-05 09:16:56', 1);
+INSERT INTO `system_log` VALUES (3, 1, '更新角色', 138, 'cn.tellsea.sunday.system.controller.RoleInfoController.update()', '{\"roleInfo\":{\"description\":\"超级管理员\",\"id\":1,\"limit\":0,\"name\":\"admin\",\"page\":0,\"resourceIds\":\"1,4,12,13,14,15,16,5,17,18,19,20,6,21,22,23,24,7,25,26,8,27,28,2,9,3,10,11\",\"sort\":0}}', '127.0.0.1', '0|0|0|内网IP|内网IP', 'CHROME -- WINDOWS_10', '2020-04-18 13:32:08', 1);
+INSERT INTO `system_log` VALUES (4, 1, '更新菜单', 12, 'cn.tellsea.sunday.system.controller.ResourceInfoController.update()', '{\"resourceInfo\":{\"component\":\"/system\",\"icon\":\"shopping\",\"id\":1,\"limit\":0,\"name\":\"系统管理\",\"page\":0,\"perms\":\"system\",\"pid\":0,\"sort\":1,\"type\":1,\"url\":\"/system\"}}', '127.0.0.1', '0|0|0|内网IP|内网IP', 'CHROME -- WINDOWS_10', '2020-04-18 13:33:32', 1);
 INSERT INTO `system_log` VALUES (5, 1, '新增角色', 41, 'com.zyxx.system.controller.UserInfoController.save()', '{\"userInfo\":{\"createTime\":\"2020-06-15 16:32:14\",\"id\":12,\"limit\":0,\"nickName\":\"撒旦法撒旦\",\"page\":0,\"phone\":\"17666666666\",\"roleIds\":\"2\",\"sex\":2,\"status\":1,\"userName\":\"似懂非懂是\"}}', '127.0.0.1', '0|0|0|内网IP|内网IP', 'CHROME -- WINDOWS_10', '2020-06-15 16:32:14', 1);
 INSERT INTO `system_log` VALUES (6, 1, '新增角色', 39, 'com.zyxx.system.controller.UserInfoController.save()', '{\"userInfo\":{\"createTime\":\"2020-06-16 15:06:22\",\"id\":13,\"limit\":0,\"nickName\":\"第三方\",\"page\":0,\"phone\":\"18666666666\",\"roleIds\":\"4\",\"sex\":1,\"status\":1,\"userName\":\"大幅度\"}}', '127.0.0.1', '0|0|0|内网IP|内网IP', 'CHROME -- WINDOWS_10', '2020-06-16 15:06:23', 1);
 INSERT INTO `system_log` VALUES (7, 1, '新增角色', 35, 'com.zyxx.system.controller.UserInfoController.save()', '{\"userInfo\":{\"createTime\":\"2020-06-16 15:08:31\",\"createUser\":1,\"id\":14,\"limit\":0,\"nickName\":\"调度\",\"page\":0,\"phone\":\"18777777777\",\"roleIds\":\"16\",\"sex\":1,\"status\":1,\"userName\":\"的\"}}', '127.0.0.1', '0|0|0|内网IP|内网IP', 'CHROME -- WINDOWS_10', '2020-06-16 15:08:31', 1);
@@ -432,6 +569,19 @@ INSERT INTO `system_log` VALUES (9, 1, '新增菜单', 7, 'com.zyxx.system.contr
 INSERT INTO `system_log` VALUES (10, 1, '更新菜单', 19, 'com.zyxx.system.controller.ResourceInfoController.update()', '{\"resourceInfo\":{\"icon\":\"啊\",\"id\":33,\"limit\":0,\"name\":\"啊\",\"page\":0,\"perms\":\"啊\",\"sort\":0,\"type\":2,\"url\":\"啊\"}}', '127.0.0.1', '0|0|0|内网IP|内网IP', 'CHROME -- WINDOWS_10', '2020-06-16 17:21:38', 1);
 INSERT INTO `system_log` VALUES (11, 1, '新增菜单', 10, 'com.zyxx.system.controller.ResourceInfoController.save()', '{\"resourceInfo\":{\"createTime\":\"2020-06-16 17:27:02\",\"createUser\":1,\"icon\":\"哎哎\",\"id\":34,\"limit\":0,\"name\":\"哎哎\",\"page\":0,\"perms\":\"哎哎\",\"pid\":33,\"sort\":0,\"status\":1,\"type\":1,\"url\":\"哎哎\"}}', '127.0.0.1', '0|0|0|内网IP|内网IP', 'CHROME -- WINDOWS_10', '2020-06-16 17:27:02', 1);
 INSERT INTO `system_log` VALUES (12, 1, '新增用户', 48, 'com.zyxx.system.controller.UserInfoController.save()', '{\"userInfo\":{\"avatar\":\"/user_info/2020/06/17/27698129-c36f-4c6d-90b0-899252e5f771.jpg\",\"createTime\":\"2020-06-17 11:35:05\",\"createUser\":1,\"id\":15,\"limit\":0,\"nickName\":\"a\",\"page\":0,\"phone\":\"19888888888\",\"roleIds\":\"18\",\"sex\":2,\"status\":1,\"userName\":\"a\"}}', '127.0.0.1', '0|0|0|内网IP|内网IP', 'CHROME -- WINDOWS_10', '2020-06-17 11:35:05', 1);
+INSERT INTO `system_log` VALUES (13, 1, '更新菜单', 48, 'com.zyxx.system.controller.ResourceInfoController.update()', '{\"resourceInfo\":{\"icon\":\"shopping\",\"id\":1,\"limit\":0,\"name\":\"系统管理\",\"page\":0,\"perms\":\"system\",\"sort\":1,\"type\":1,\"url\":\"/system\"}}', '127.0.0.1', '0|0|0|内网IP|内网IP', 'CHROME8 -- WINDOWS_10', '2020-06-22 15:50:40', 1);
+INSERT INTO `system_log` VALUES (14, 1, '新增角色', 152, 'com.zyxx.system.controller.RoleInfoController.save()', '{\"roleInfo\":{\"createTime\":\"2020-06-22 18:02:13\",\"createUser\":1,\"description\":\"啊啊啊啊啊\",\"id\":20,\"limit\":0,\"name\":\"test\",\"page\":0,\"resourceIds\":\"9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,30,31,32,34\",\"sort\":0,\"status\":1}}', '127.0.0.1', '0|0|0|内网IP|内网IP', 'CHROME8 -- WINDOWS_10', '2020-06-22 18:02:14', 1);
+INSERT INTO `system_log` VALUES (15, 1, '更新菜单', 57, 'com.zyxx.system.controller.ResourceInfoController.update()', '{\"resourceInfo\":{\"icon\":\"啊\",\"id\":33,\"limit\":0,\"name\":\"啊\",\"page\":0,\"perms\":\"啊\",\"sort\":4,\"type\":2,\"url\":\"啊\"}}', '127.0.0.1', '0|0|0|内网IP|内网IP', 'CHROME8 -- WINDOWS_10', '2020-06-23 10:09:12', 1);
+INSERT INTO `system_log` VALUES (16, 1, '新增角色', 138, 'com.zyxx.system.controller.RoleInfoController.save()', '{\"roleInfo\":{\"createTime\":\"2020-06-23 10:10:44\",\"createUser\":1,\"description\":\"测试啊的权限\",\"id\":21,\"limit\":0,\"name\":\"测试呀\",\"page\":0,\"resourceIds\":\"12,13,14,15,16,30,31\",\"role\":\"测试呀\",\"sort\":0,\"status\":1}}', '127.0.0.1', '0|0|0|内网IP|内网IP', 'CHROME8 -- WINDOWS_10', '2020-06-23 10:10:45', 1);
+INSERT INTO `system_log` VALUES (17, 1, '更新角色', 138, 'com.zyxx.system.controller.RoleInfoController.update()', '{\"roleInfo\":{\"description\":\"测试001的权限\",\"id\":5,\"limit\":0,\"name\":\"测试001\",\"page\":0,\"resourceIds\":\"4,12,1,13\",\"role\":\"tigger\",\"sort\":0}}', '127.0.0.1', '0|0|0|内网IP|内网IP', 'CHROME8 -- WINDOWS_10', '2020-06-23 10:28:53', 1);
+INSERT INTO `system_log` VALUES (18, 1, '新增角色', 195, 'com.zyxx.system.controller.RoleInfoController.save()', '{\"roleInfo\":{\"createTime\":\"2020-06-23 10:29:14\",\"createUser\":1,\"description\":\"啊\",\"id\":22,\"limit\":0,\"name\":\"啊\",\"page\":0,\"resourceIds\":\"12,13,14,15,16,30,31\",\"role\":\"啊\",\"sort\":0,\"status\":1}}', '127.0.0.1', '0|0|0|内网IP|内网IP', 'CHROME8 -- WINDOWS_10', '2020-06-23 10:29:15', 1);
+INSERT INTO `system_log` VALUES (19, 1, '新增字典类型', 52, 'com.zyxx.system.controller.DictTypeController.save()', '{\"dictType\":{\"createTime\":1592967752762,\"id\":2,\"limit\":0,\"name\":\"用户状态\",\"page\":0,\"remark\":\"用户装填列表\",\"status\":1,\"type\":\"user_info_status\"}}', '127.0.0.1', '0|0|0|内网IP|内网IP', 'CHROME8 -- WINDOWS_10', '2020-06-24 11:02:33', 1);
+INSERT INTO `system_log` VALUES (20, 1, '更新字典类型', 82, 'com.zyxx.system.controller.DictTypeController.updateById()', '{\"dictType\":{\"id\":2,\"limit\":0,\"name\":\"用户状态1\",\"page\":0,\"remark\":\"用户状态列表\",\"status\":2,\"type\":\"user_info_status1\"}}', '127.0.0.1', '0|0|0|内网IP|内网IP', 'CHROME8 -- WINDOWS_10', '2020-06-24 11:03:16', 1);
+INSERT INTO `system_log` VALUES (21, 1, '更新状态', 40, 'com.zyxx.system.controller.DictTypeController.updateStatus()', '{\"dictType\":{\"id\":2,\"limit\":0,\"page\":0,\"status\":2}}', '127.0.0.1', '0|0|0|内网IP|内网IP', 'CHROME8 -- WINDOWS_10', '2020-06-24 11:12:32', 1);
+INSERT INTO `system_log` VALUES (22, 1, '新增字典数据', 40, 'com.zyxx.system.controller.DictDataController.save()', '{\"dictData\":{\"createTime\":1592970808799,\"createUser\":1,\"id\":4,\"limit\":0,\"page\":0,\"remark\":\"\",\"sort\":0,\"status\":1,\"text\":\"未知\",\"type\":\"user_info_sex\",\"value\":\"4\"}}', '127.0.0.1', '0|0|0|内网IP|内网IP', 'CHROME8 -- WINDOWS_10', '2020-06-24 11:53:29', 1);
+INSERT INTO `system_log` VALUES (23, 1, '更新字典数据', 50, 'com.zyxx.system.controller.DictDataController.updateById()', '{\"dictData\":{\"id\":3,\"limit\":0,\"page\":0,\"remark\":\"用户性别\",\"sort\":2,\"text\":\"保密1\",\"type\":\"user_info_sex\",\"value\":\"4\"}}', '127.0.0.1', '0|0|0|内网IP|内网IP', 'CHROME8 -- WINDOWS_10', '2020-06-24 11:54:12', 1);
+INSERT INTO `system_log` VALUES (24, 1, '更新字典数据', 25, 'com.zyxx.system.controller.DictDataController.updateById()', '{\"dictData\":{\"id\":3,\"limit\":0,\"page\":0,\"remark\":\"用户性别\",\"sort\":0,\"text\":\"保密\",\"type\":\"user_info_sex\",\"value\":\"3\"}}', '127.0.0.1', '0|0|0|内网IP|内网IP', 'CHROME8 -- WINDOWS_10', '2020-06-24 11:54:32', 1);
+INSERT INTO `system_log` VALUES (25, 1, '更新字典数据', 39, 'com.zyxx.system.controller.DictDataController.updateById()', '{\"dictData\":{\"id\":4,\"limit\":0,\"page\":0,\"remark\":\"2\",\"sort\":0,\"text\":\"未知\",\"type\":\"user_info_sex\",\"value\":\"4\"}}', '127.0.0.1', '0|0|0|内网IP|内网IP', 'CHROME8 -- WINDOWS_10', '2020-06-24 11:54:52', 1);
 
 -- ----------------------------
 -- Table structure for user_info
@@ -439,7 +589,7 @@ INSERT INTO `system_log` VALUES (12, 1, '新增用户', 48, 'com.zyxx.system.con
 DROP TABLE IF EXISTS `user_info`;
 CREATE TABLE `user_info`  (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '用户ID',
-  `user_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '用户名',
+  `user_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户名',
   `nick_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '账户，登录名，不可更改',
   `password` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '密码',
   `salt` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '盐值',
@@ -452,21 +602,22 @@ CREATE TABLE `user_info`  (
   `login_times` int(11) NULL DEFAULT 0 COMMENT '登录次数',
   `last_login_time` datetime(0) NULL DEFAULT NULL COMMENT '最后登录时间',
   `status` tinyint(1) NULL DEFAULT 0 COMMENT '状态 1 正常 2 禁用 3删除',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `user_name`(`user_name`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user_info
 -- ----------------------------
-INSERT INTO `user_info` VALUES (1, 'Tellsea', '超级管理员', 'a994fef0ddad5f9eed20804e7b18f559', 'VKqvum8YW0xNaTDFbrcijhTG6wUP5xAZ', 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2562372298,495845374&fm=26&gp=0.jpg', '18386474459', 1, 'I am Iron Man', 1, '2019-06-21 16:16:30', 12, '2019-12-20 10:15:58', 1);
+INSERT INTO `user_info` VALUES (1, 'admin', '超级管理员', 'a994fef0ddad5f9eed20804e7b18f559', 'VKqvum8YW0xNaTDFbrcijhTG6wUP5xAZ', 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2562372298,495845374&fm=26&gp=0.jpg', '18386474459', 1, 'I am Iron Man', 1, '2019-06-21 16:16:30', 12, '2019-12-20 10:15:58', 1);
 INSERT INTO `user_info` VALUES (2, 'system', '系统管理员', '44eb196feb810ee770047cc34da66133', 'V1D9h266hLYqYfF5DnZCjlJKyG3Gx36c', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3041599764,2432042915&fm=26&gp=0.jpg', '15836541252', 1, '我不想打字', 1, '2019-12-24 17:07:19', 0, NULL, 1);
 INSERT INTO `user_info` VALUES (3, 'monitor', '系统监控员', '221605ef8256bb0cfbbfa5fb7688eaf1', '2HI9EdHJjSYsfyqSdbWlXZRxJNXvFnrE', 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=584948523,1006436504&fm=26&gp=0.jpg', '15356521441', 2, '中二病晚期', 1, '2019-12-24 17:17:17', 0, NULL, 2);
 INSERT INTO `user_info` VALUES (4, 'testAdd', 'testAdd', '123456', NULL, 'http://img3.imgtn.bdimg.com/it/u=2688095354,2019872825&fm=26&gp=0.jpg', '18675455444', 2, '测试新增', 0, NULL, 0, NULL, 1);
 INSERT INTO `user_info` VALUES (5, 'test', 'test', NULL, NULL, 'http://img3.imgtn.bdimg.com/it/u=2730021372,1817015653&fm=26&gp=0.jpg', '18777777777', 1, NULL, 0, '2020-05-28 10:44:19', 0, NULL, 1);
-INSERT INTO `user_info` VALUES (6, 'test', 'test', NULL, NULL, 'http://img3.imgtn.bdimg.com/it/u=2730021372,1817015653&fm=26&gp=0.jpg', '18766666666', 1, NULL, 0, '2020-05-28 11:11:48', 0, NULL, 1);
+INSERT INTO `user_info` VALUES (6, 'test1', 'test', NULL, NULL, 'http://img3.imgtn.bdimg.com/it/u=2730021372,1817015653&fm=26&gp=0.jpg', '18766666666', 1, NULL, 0, '2020-05-28 11:11:48', 0, NULL, 1);
 INSERT INTO `user_info` VALUES (7, 'superman1', '超管1', NULL, NULL, 'http://img3.imgtn.bdimg.com/it/u=2730021372,1817015653&fm=26&gp=0.jpg', '19386666667', 1, NULL, 0, '2020-05-31 15:35:43', 0, NULL, 1);
 INSERT INTO `user_info` VALUES (8, 'superman', '超管', NULL, NULL, 'http://img3.imgtn.bdimg.com/it/u=2730021372,1817015653&fm=26&gp=0.jpg', '19386666666', 1, NULL, 0, '2020-05-31 15:36:55', 0, NULL, 1);
-INSERT INTO `user_info` VALUES (9, 'test', 'test', NULL, NULL, NULL, '18777777777', 1, NULL, 0, '2020-06-15 10:42:04', 0, NULL, 1);
+INSERT INTO `user_info` VALUES (9, 'test2', 'test', NULL, NULL, NULL, '18777777777', 1, NULL, 0, '2020-06-15 10:42:04', 0, NULL, 1);
 INSERT INTO `user_info` VALUES (10, '士大夫撒发', '撒旦法师打发', NULL, NULL, NULL, '18777777777', 1, NULL, 0, '2020-06-15 16:26:16', 0, NULL, 1);
 INSERT INTO `user_info` VALUES (11, '是否第三方', '啥打法上', NULL, NULL, NULL, '17666666666', 1, NULL, 0, '2020-06-15 16:27:00', 0, NULL, 1);
 INSERT INTO `user_info` VALUES (12, '似懂非懂是', '撒旦法撒旦', NULL, NULL, NULL, '17666666666', 2, NULL, 0, '2020-06-15 16:32:14', 0, NULL, 1);
