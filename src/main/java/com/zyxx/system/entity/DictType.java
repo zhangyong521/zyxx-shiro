@@ -47,9 +47,15 @@ public class DictType extends BaseEntity {
     private String remark;
 
     /**
+     * 排序
+     */
+    @TableField("sort")
+    private Integer sort;
+
+    /**
      * 创建人
      */
-    @TableField("create_user")
+    @TableField(value = "create_user",fill = FieldFill.INSERT)
     private Integer createUser;
 
     /**

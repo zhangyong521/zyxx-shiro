@@ -153,7 +153,7 @@
             reset: function() {
                 $("#searchForm")[0].reset();
                 var data = form.val('searchFormFilter');
-                table.reload('dataTable', {where: data});
+                table.reload('dataTable', {where: data, page: {curr: 1}});
             },
             // 新增
             add: function () {

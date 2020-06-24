@@ -97,29 +97,44 @@ public class ResponseResult implements Serializable {
     }
 
     public static ResponseResult verify(CrudEnums crudEnums, int count) throws CrudException {
-        if (count > 0) {
-            log.info("影响数据库行数：" + count);
-            if (crudEnums.getCode() == CrudEnums.SAVE.getCode()) {
-                return success(StatusEnums.SAVE_SUCCESS);
-            } else if (crudEnums.getCode() == CrudEnums.UPDATE.getCode()) {
-                return success(StatusEnums.UPDATE_SUCCESS);
-            } else if (crudEnums.getCode() == CrudEnums.DELETE.getCode()) {
-                return success(StatusEnums.DELETE_SUCCESS);
-            }
+        return count > 0 ? judgeSuccess(crudEnums) : judgeError(crudEnums);
+    }
+
+    public static ResponseResult verifyBoolean(boolean flag) {
+        if (flag) {
+            return ResponseResult.success();
+        } else {
+            return ResponseResult.error();
         }
+    }
+
+    public static ResponseResult verifyBoolean(CrudEnums crudEnums, boolean flag) {
+        return flag ? judgeSuccess(crudEnums) : judgeError(crudEnums);
+    }
+
+
+
+
+
+    private static ResponseResult judgeSuccess(CrudEnums crudEnums) {
+        if (crudEnums.getCode() == CrudEnums.SAVE.getCode()) {
+            return success(StatusEnums.SAVE_SUCCESS);
+        } else if (crudEnums.getCode() == CrudEnums.UPDATE.getCode()) {
+            return success(StatusEnums.UPDATE_SUCCESS);
+        } else if (crudEnums.getCode() == CrudEnums.DELETE.getCode()) {
+            return success(StatusEnums.DELETE_SUCCESS);
+        } else {
+            return ResponseResult.success();
+        }
+    }
+
+    private static ResponseResult judgeError(CrudEnums crudEnums) {
         if (crudEnums.getCode() == CrudEnums.SAVE.getCode()) {
             throw new CrudException(StatusEnums.SAVE_ERROR.getInfo());
         } else if (crudEnums.getCode() == CrudEnums.UPDATE.getCode()) {
             throw new CrudException(StatusEnums.UPDATE_ERROR.getInfo());
         } else if (crudEnums.getCode() == CrudEnums.DELETE.getCode()) {
             throw new CrudException(StatusEnums.DELETE_ERROR.getInfo());
-        }
-        return ResponseResult.error();
-    }
-
-    public static ResponseResult verifyBoolean(boolean flag) {
-        if (flag) {
-            return ResponseResult.success();
         } else {
             return ResponseResult.error();
         }

@@ -13,15 +13,15 @@
                     <form class="layui-form" id="searchForm" lay-filter="searchFormFilter">
                         <div class="layui-form-item">
                             <div class="layui-inline">
-                                <label class="layui-form-label">角色标识</label>
+                                <label class="layui-form-label">字典名称</label>
                                 <div class="layui-input-inline">
-                                    <input type="text" name="role" lay-verify="required" autocomplete="off" placeholder="请输入" class="layui-input">
+                                    <input type="text" name="name" autocomplete="off" class="layui-input" placeholder="请输入">
                                 </div>
                             </div>
                             <div class="layui-inline">
-                                <label class="layui-form-label">角色名称</label>
+                                <label class="layui-form-label">字典类型</label>
                                 <div class="layui-input-inline">
-                                    <input type="text" name="name" lay-verify="required" autocomplete="off" placeholder="请输入" class="layui-input">
+                                    <input type="text" name="type" autocomplete="off" class="layui-input" placeholder="请输入">
                                 </div>
                             </div>
                             <div class="layui-inline">
@@ -57,83 +57,38 @@
     </div>
 </div>
 </body>
-<!-- 新增 -->
-<div id="addModel" class="layui-model">
-    <form class="layui-form" id="addForm" lay-filter="addFormFilter">
+<!-- 新增/更新 -->
+<div id="dataModel" class="layui-model">
+    <form class="layui-form" id="dataForm" lay-filter="dataFormFilter">
         <div class="layui-form-item">
-            <label class="layui-form-label">角色标识</label>
-            <div class="layui-input-block">
-                <input type="text" name="role" lay-verify="required" autocomplete="off" placeholder="请输入" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">角色名称</label>
+            <label class="layui-form-label">字典名称</label>
             <div class="layui-input-block">
                 <input type="text" name="name" lay-verify="required" autocomplete="off" placeholder="请输入" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">角色描述</label>
+            <label class="layui-form-label">字典类型</label>
             <div class="layui-input-block">
-                <input type="text" name="description" lay-verify="required" autocomplete="off" placeholder="请输入" class="layui-input">
+                <input type="text" name="type" lay-verify="required" autocomplete="off" placeholder="请输入" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">角色排序</label>
+            <label class="layui-form-label">排序</label>
             <div class="layui-input-block">
                 <input type="number" name="sort" value="0" lay-verify="required" autocomplete="off" placeholder="请输入" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">角色权限</label>
+            <label class="layui-form-label">备注</label>
             <div class="layui-input-block">
-                <div id="xmSelectAdd"></div>
+                <textarea name="remark" class="layui-textarea"></textarea>
             </div>
         </div>
         <div class="layui-hide">
-            <button type="submit" class="layui-btn" id="addFormSubmit" lay-submit lay-filter="addFormSubmitFilter"></button>
+            <button type="submit" class="layui-btn" id="dataFormSubmit" lay-submit lay-filter="dataFormSubmitFilter"></button>
         </div>
     </form>
 </div>
-<!-- 更新 -->
-<div id="updateModel" class="layui-model">
-    <form class="layui-form" id="updateForm" lay-filter="updateFormFilter">
-        <div class="layui-form-item">
-            <label class="layui-form-label">角色标识</label>
-            <div class="layui-input-block">
-                <input type="text" name="role" lay-verify="required" autocomplete="off" placeholder="请输入" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">角色名称</label>
-            <div class="layui-input-block">
-                <input type="text" name="name" lay-verify="required" autocomplete="off" placeholder="请输入" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">角色描述</label>
-            <div class="layui-input-block">
-                <input type="text" name="description" lay-verify="required" autocomplete="off" placeholder="请输入" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">角色排序</label>
-            <div class="layui-input-block">
-                <input type="number" name="sort" lay-verify="required" autocomplete="off" placeholder="请输入" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">角色权限</label>
-            <div class="layui-input-block">
-                <div id="xmSelectUpdate"></div>
-            </div>
-        </div>
-        <div class="layui-hide">
-            <button type="submit" class="layui-btn" id="updateFormSubmit" lay-submit lay-filter="updateFormSubmitFilter"></button>
-        </div>
-    </form>
-</div>
-
 <div th:replace="/system/section/js"></div>
 <script th:inline="javascript">
     layui.use(['element', 'table', 'zyxx', 'form', 'layer'], function () {
@@ -144,75 +99,29 @@
             , layer = layui.layer
             , $ = layui.jquery;
 
-        var xsOption = {
-            name: 'resourceIds',
-            autoRow: true,
-            filterable: true,
-            direction: 'down',
-            tree: {
-                //是否显示树状结构
-                show: true,
-                //是否显示虚线
-                showLine: true,
-                //展开所有节点
-                expandedKeys: true,
-                //是否严格遵守父子模式
-                strict: true,
-            },
-            toolbar: {show: true},
-            height: 'auto',
-            prop: {
-                name: 'name',
-                value: 'id',
-            },
-            data: function() {
-                return [[${resourceInfoList}]]
-            }
-        };
-        // 实例化新增
-        var xsAdd = xsOption;
-        xsAdd.el = '#xmSelectAdd';
-        var xmSelectAdd = xmSelect.render(xsAdd);
-        // 实例化更新
-        var xsUpdate = xsOption;
-        xsUpdate.el = '#xmSelectUpdate';
-        xsUpdate.tree.strict = false;
-        var xmSelectUpdate = xmSelect.render(xsUpdate);
-
         // 数据表格
         table.render({
             id: 'dataTable'
             , elem: '#dataTable'
             , method: 'post'
-            , url: '/system/roleInfo/listByTable'
+            , url: '/system/dictType/listByTable'
             , page: true
             , limit: 20
             , limits: [20, 40, 50, 80, 100]
             , height: "full-" + ($('#zyxx-search').height() + 40)
-            , cols: [[
-                // {type: 'checkbox'}
-                {type:'numbers', title: '序号'}
-                , {field: 'role', title: '角色标识', width: 120}
-                , {field: 'name', title: '角色名称', width: 120}
-                , {field: 'description', title: '角色描述', width: 200}
-                , {field: 'resourceName', title: '角色权限'}
+            , cellMinWidth: 80
+            , cols: [ [
+                {type:'numbers', title: '序号', width: 80}
+                , {field: 'name', title: '字典名称', width: 150}
+                , {field: 'type', title: '字典类型', width: 150, style: 'color: #1E9FFF', event: 'detail'}
+                , {field: 'remark', title: '备注'}
+                /*, {field: 'createUserName', title: '创建人', width: 120}*/
                 , {field: 'sort', title: '排序', width: 80, sort: true}
-                , {field: 'userName', title: '创建人', width: 100}
-                , {field: 'createTime', title: '创建时间', width: 160, sort: true}
+                , {field: 'createTime', title: '创建时间', width: 160}
                 , {
-                    field: 'status', title: '状态', width: 80, templet: function (d) {
-                        if (d.status == 1) {
-                            return '<span class="layui-badge layui-bg-green">正常</span>'
-                        } else if (d.status == 2) {
-                            return '<span class="layui-badge layui-bg-orange">锁定</span>'
-                        } else if (d.status == 3) {
-                            return '<span class="layui-badge layui-bg-black">删除</span>'
-                        }
-                    }
-                }
-                , {
-                    fixed: 'right', title: '操作', width: 100, templet: function (d) {
+                    fixed: 'right', title: '操作', width: 120, templet: function (d) {
                         var dom = '';
+                        dom += '<a class="layui-color-green" lay-event="detail" title="数据列表"><i class="layui-icon layui-icon-slider"></i></a>';
                         dom += '<a class="layui-color-blue" lay-event="update" title="更新"><i class="layui-icon layui-icon-edit"></i></a>';
                         dom += '<a class="layui-color-red" lay-event="delete" title="删除"><i class="layui-icon layui-icon-delete"></i></a>';
                         return dom;
@@ -221,6 +130,7 @@
             ]]
         });
 
+        // 第一步：注册方法
         globalActive = {
             // 查询、刷新
             search: function() {
@@ -235,16 +145,11 @@
             },
             // 新增
             add: function () {
-                zyxx.openForm('新增角色', 'addModel', 'addForm', false, 500, 500, function () {
-                    form.on('submit(addFormSubmitFilter)', function (obj) {
-                        if (zyxx.isEmpty(obj.field.resourceIds)) {
-                            layer.msg('请选择权限', {time: 2000, icon: 2});
-                            xmSelectAdd.warning('#e54d42', true);
-                            return false;
-                        }
+                zyxx.openForm('新增字典类型', 'dataModel', 'dataForm', false, 500, 400, function () {
+                    form.on('submit(dataFormSubmitFilter)', function (obj) {
                         layer.load(2, {shade: 0.1});
                         $.ajax({
-                            url: '/system/roleInfo/save',
+                            url: '/system/dictType/save',
                             type: 'post',
                             data: obj.field,
                             dataType: 'json',
@@ -265,25 +170,24 @@
                         });
                         return false;
                     });
-                    $('#addFormSubmit').trigger("click");
+                    $('#dataFormSubmit').trigger("click");
                 });
             },
-            // 更新
-            update: function (obj) {
+            // 数据列表
+            detail: function (obj) {
                 var data = zyxx.parse(obj);
-                xmSelectUpdate.setValue(data.resourceIds.split(','));
-                form.val('updateFormFilter', data);
-                zyxx.openForm('更新角色', 'updateModel', 'updateForm', false, 500, 500, function () {
-                    form.on('submit(updateFormSubmitFilter)', function (obj) {
+                zyxx.openTabsPage('/system/dictData/initPage?type=' + data.type, '数据列表(' + data.name + ')');
+            },
+            // 更新
+            update: function(obj) {
+                var data = zyxx.parse(obj);
+                form.val('dataFormFilter', data);
+                zyxx.openForm('更新字典类型', 'dataModel', 'dataForm', false, 500, 400, function () {
+                    form.on('submit(dataFormSubmitFilter)', function (obj) {
                         obj.field.id = data.id;
-                        if (zyxx.isEmpty(obj.field.resourceIds)) {
-                            layer.msg('请选择权限', {time: 2000, icon: 2});
-                            xmSelectUpdate.warning('#e54d42', true);
-                            return false;
-                        }
                         layer.load(2, {shade: 0.1});
                         $.ajax({
-                            url: '/system/roleInfo/update',
+                            url: '/system/dictType/updateById',
                             type: 'post',
                             data: obj.field,
                             dataType: 'json',
@@ -304,7 +208,7 @@
                         });
                         return false;
                     });
-                    $('#updateFormSubmit').trigger("click");
+                    $('#dataFormSubmit').trigger("click");
                 });
             },
             // 删除
@@ -313,9 +217,9 @@
                 layer.confirm('删除数据后不可恢复，确定删除吗？', {icon: 0, title: '提示'}, function () {
                     layer.load(2, {shade: 0.1});
                     $.ajax({
-                        url: '/system/roleInfo/deleteById',
+                        url: '/system/dictType/updateStatus',
                         type: 'post',
-                        data: {id: data.id},
+                        data: {id: data.id, status: 2},
                         dataType: 'json',
                         success: function (res) {
                             if (res.code == 200) {

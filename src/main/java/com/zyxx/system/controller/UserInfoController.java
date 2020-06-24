@@ -3,14 +3,12 @@ package com.zyxx.system.controller;
 import com.zyxx.common.annotation.Log;
 import com.zyxx.common.entity.ResponseResult;
 import com.zyxx.common.enums.CrudEnums;
-import com.zyxx.common.exception.BaseException;
 import com.zyxx.common.exception.CrudException;
 import com.zyxx.system.entity.UserInfo;
 import com.zyxx.system.service.UserInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -55,19 +53,10 @@ public class UserInfoController {
         return ResponseResult.verify(CrudEnums.UPDATE, userInfoService.updateUserInfo(userInfo));
     }
 
-    @Log("更新状态")
-    @ApiOperation("更新状态")
+    @Log("更新用户状态")
+    @ApiOperation("更新用户状态")
     @PostMapping("updateStatus")
     public ResponseResult updateStatus(UserInfo userInfo) throws CrudException {
         return ResponseResult.verify(CrudEnums.DELETE, userInfoService.updateStatus(userInfo));
-    }
-
-    @ApiOperation("测试异常")
-    @GetMapping("testException")
-    public ResponseResult testException() {
-        if (true) {
-            throw new BaseException("我错了，异常信息");
-        }
-        return ResponseResult.error("我错了");
     }
 }

@@ -34,7 +34,7 @@ public class ViewSystemController {
 
     @ApiOperation("用户管理页")
     @GetMapping("/userInfo/initPage")
-    public String userInfoListPage() {
+    public String userInfoInitPage() {
         return "system/user_info_list";
     }
 
@@ -70,27 +70,40 @@ public class ViewSystemController {
 
     @ApiOperation("角色管理页")
     @GetMapping("/roleInfo/initPage")
-    public String roleInfoListPage(Model model) {
+    public String roleInfoInitPage(Model model) {
         model.addAttribute("resourceInfoList", resourceInfoService.listResourceInfoByTree(new ResourceInfo()));
         return "system/role_info_list";
     }
 
     @ApiOperation("菜单管理页")
     @GetMapping("/resourceInfo/initPage")
-    public String resourceInfoPage(Model model) {
+    public String resourceInfoInitPage(Model model) {
         model.addAttribute("resourceInfoList", resourceInfoService.listResourceInfoByTree(new ResourceInfo()));
         return "system/resource_info_list";
     }
 
     @ApiOperation("系统日志页")
     @GetMapping("/systemLog/initPage")
-    public String systemLogPage() {
+    public String systemLogInitPage() {
         return "system/system_log_list";
     }
 
     @ApiOperation("登录日志页")
     @GetMapping("/loginLog/initPage")
-    public String loginLogPage() {
+    public String loginLogInitPage() {
         return "system/login_log_list";
+    }
+
+    @ApiOperation("字典类型页")
+    @GetMapping("/dictType/initPage")
+    public String dictTypeInitPage() {
+        return "system/dict_type_list";
+    }
+
+    @ApiOperation("字典数据页")
+    @GetMapping("/dictData/initPage")
+    public String dictDataInitPage(String type, Model model) {
+        model.addAttribute("type", type);
+        return "system/dict_data_list";
     }
 }

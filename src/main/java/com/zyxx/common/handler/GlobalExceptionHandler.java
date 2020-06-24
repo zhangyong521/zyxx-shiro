@@ -9,6 +9,7 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -119,5 +120,12 @@ public class GlobalExceptionHandler {
     public ResponseResult handleUnauthenticatedException(UnauthenticatedException e) {
         log.error("UnauthenticatedException：{}", "未授权，请先登录");
         return ResponseResult.errorMsg("未授权，请先登录");
+    }
+
+    @ExceptionHandler(value = DuplicateKeyException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResponseResult handleDuplicateKeyException(DuplicateKeyException e) {
+        log.error("DuplicateKeyException：{}", e.getMessage());
+        return ResponseResult.build(HttpStatus.PRECONDITION_REQUIRED.value(), e.getMessage());
     }
 }

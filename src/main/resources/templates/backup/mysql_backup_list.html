@@ -142,7 +142,7 @@
             reset: function() {
                 $("#searchForm")[0].reset();
                 var data = form.val('searchFormFilter');
-                table.reload('dataTable', {where: data});
+                table.reload('dataTable', {where: data, page: {curr: 1}});
             },
             add: function () {
                 zyxx.openTabsPage('/backup/mysqlBackup/addPage', '创建备份');
