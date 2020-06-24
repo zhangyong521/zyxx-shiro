@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
+import com.zyxx.common.entity.BaseEntity;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public class CodeGenerator {
     // @author 值
     private static final String AUTHOR = "Tellsea";
     // 模块名称
-    private static final String MODULE_NAME = "system";
+    private static final String MODULE_NAME = "test";
     // 包的基础路径
     private static final String BASE_PACKAGE_URL = "com.zyxx";
     // xml文件路径
@@ -104,8 +105,7 @@ public class CodeGenerator {
         strategy.setEntityLombokModel(true);
         strategy.setRestControllerStyle(true);
         strategy.setInclude(scanner("表名"));
-        // strategy.setLogicDeleteFieldName("status");
-        // strategy.setSuperEntityColumns("id");
+        strategy.setSuperEntityClass(BaseEntity.class);
         strategy.setEntityTableFieldAnnotationEnable(true);
         strategy.setControllerMappingHyphenStyle(false);
         // strategy.setTablePrefix(packageConfig.getModuleName() + "_");
